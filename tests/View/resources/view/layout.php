@@ -1,0 +1,1 @@
+<div><?=$value1;?><?=view(__DIR__ . '/view.php',['value' => $value2]);?></div>

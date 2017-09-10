@@ -1,0 +1,102 @@
+$nabbar_height: 42px;
+
+.header {
+    z-index: 15;
+    width: 100%;
+    background: #222;
+    color: #aaa;
+    height: $nabbar_height;
+    &__back {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: none;
+        @include media-breakpoint-up(md) {
+            display: block;
+        }
+        a {
+            display: block;
+            padding: 12px;
+            color: #888;
+            border: none;
+            font-size: 14px;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+    &__title {
+        padding: 10px;
+        h4 {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1;
+            margin: 0;
+            font-size: 20px;
+            font-weight: 100;
+        }
+        margin-left: 42px;
+        @include media-breakpoint-up(md) {
+            margin-left: 0;
+        }
+    }
+
+    &__menulink {
+        float: left;
+        @include media-breakpoint-up(md) {
+            display: none;
+        }
+        a {
+            position: relative;
+            height: $nabbar_height;
+            display: block;
+            border: none;
+            font-style: normal;
+            font-weight: normal;
+            width: 42px;
+            color: #888;
+            &::after {
+                position: absolute;
+                display: block;
+                top: 10px;
+                left: 10px;
+                margin: 0;
+                height: 22px;
+                width: 22px;
+                //@include svg("../images/menu.svg","../images/menu.png","../images/menu@2x.png");
+                background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsAgMAAABj6rKSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAxQTFRFAAAA////////////OMA7qAAAAAN0Uk5TAEC/UdElxgAAACZJREFUKM9jYCARrEIAhv8IQBR7oEAoApDsZmS9AwVIdTNyHJEIADyCmWfNrDEMAAAAAElFTkSuQmCC");
+                -moz-background-size: contain, 0 0; /* FF3.6 */
+                -webkit-background-size: contain, 0 0;
+                -o-background-size: contain, 0 0;
+                background-size: contain, 0 0;
+                content: '';
+                opacity: 0.7;
+            }
+            &:hover {
+                &::after {
+                    opacity: 0.7;
+                }
+            }
+        }
+        &-active {
+            a {
+                &::after {
+                    opacity: 0.9;
+                }
+                background: #333;
+            }
+        }
+    }
+
+    &-fly {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+}
+
+.header_fix_fly {
+    height: 42px;
+}

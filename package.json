@@ -1,0 +1,21 @@
+{
+    "name": "spiritphp-spirit",
+    "description": "SpiritPHP Framework",
+    "version": "1.0.0",
+    "scripts": {
+        "production": "gulp --production",
+        "dev": "gulp watch"
+    },
+    "author": "Marat Nuriev",
+    "email": "nurieff@gmail.com",
+    "license": "MIT",
+    "dependencies": {
+        "bootstrap": "^4.0.0-beta",
+        "jquery": "^3.2.1"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-sass": "^3.1.0",
+        "gulp-sourcemaps": "^2.6.0"
+    }
+}
