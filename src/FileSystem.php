@@ -47,19 +47,13 @@ class FileSystem
         }
     }
 
-    /**
-     * Delete the file at a given path.
-     *
-     * @param  string|array $paths
-     * @return bool
-     */
     public static function delete($paths)
     {
         $paths = is_array($paths) ? $paths : func_get_args();
 
         $success = true;
 
-        foreach ($paths as $path) {
+        foreach($paths as $path) {
             try {
                 if (!@unlink($path)) {
                     $success = false;
@@ -79,128 +73,84 @@ class FileSystem
 
     public static function copy($path, $target)
     {
+        $dir = dirname($target);
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
         return copy($path, $target);
     }
 
-    /**
-     * Extract the file name from a file path.
-     *
-     * @param  string $path
-     * @return string
-     */
     public static function name($path)
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
 
-    /**
-     * Extract the trailing name component from a file path.
-     *
-     * @param  string $path
-     * @return string
-     */
     public static function basename($path)
     {
         return pathinfo($path, PATHINFO_BASENAME);
     }
 
-    /**
-     * Extract the parent directory from a file path.
-     *
-     * @param  string $path
-     * @return string
-     */
     public static function dirname($path)
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }
 
-    /**
-     * Extract the file extension from a file path.
-     *
-     * @param  string $path
-     * @return string
-     */
     public static function extension($path)
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
-    /**
-     * Get the file type of a given file.
-     *
-     * @param  string $path
-     * @return string
-     */
     public static function type($path)
     {
         return filetype($path);
     }
 
-    /**
-     * Get the mime-type of a given file.
-     *
-     * @param  string $path
-     * @return string|false
-     */
     public static function mimeType($path)
     {
         return MimeType::get($path);
     }
 
-    /**
-     * Get the file size of a given file.
-     *
-     * @param  string $path
-     * @return int
-     */
     public static function size($path)
     {
         return filesize($path);
     }
 
-    /**
-     * Get the file's last modification time.
-     *
-     * @param  string $path
-     * @return int
-     */
     public static function lastModified($path)
     {
         return filemtime($path);
     }
 
-    /**
-     * Determine if the given path is a directory.
-     *
-     * @param  string $directory
-     * @return bool
-     */
     public static function isDirectory($directory)
     {
         return is_dir($directory);
     }
 
-    /**
-     * Determine if the given path is writable.
-     *
-     * @param  string $path
-     * @return bool
-     */
     public static function isWritable($path)
     {
         return is_writable($path);
     }
 
-    /**
-     * Determine if the given path is a file.
-     *
-     * @param  string $file
-     * @return bool
-     */
     public static function isFile($file)
     {
         return is_file($file);
+    }
+
+    static function copyDirectory($directory, $destination)
+    {
+        $dir = opendir($directory);
+        mkdir($destination, 0777, true);
+        while (false !== ($file = readdir($dir))) {
+            if (($file !== '.') && ($file !== '..')) {
+                if (is_dir($directory . '/' . $file)) {
+                    static::copyDirectory($directory . '/' . $file, $destination . '/' . $file);
+                } else {
+                    copy($directory . '/' . $file, $destination . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
     }
 
     static function removeDirectory($directory = false, $removeHeadDir = true, $exclude = [])
