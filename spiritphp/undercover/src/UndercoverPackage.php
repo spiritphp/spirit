@@ -11,6 +11,6 @@ class UndercoverPackage extends Package {
 
     public function install()
     {
-
+        // TODO скопировть файлы
     }
 }
