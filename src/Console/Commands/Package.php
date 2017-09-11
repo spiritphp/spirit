@@ -2,6 +2,7 @@
 
 namespace Spirit\Console\Commands;
 
+use Spirit\Console\Table as ConsoleTable;
 use Spirit\Console;
 use Spirit\Structure\Command;
 
@@ -41,6 +42,35 @@ class Package extends Command
     }
 
     protected function command()
+    {
+        if ($this->extCommand === 'install') {
+            $this->commandInstall();
+        } else {
+            $this->commandList();
+        }
+
+    }
+
+    protected function commandList()
+    {
+        $t = ConsoleTable::make()
+            ->setHeader([
+                'Package',
+                'Description',
+            ]);
+
+        foreach($this->cfg()->packages as $package) {
+            $des = $package::description();
+            $t->addRow([
+                $package::name(),
+                ($des ? $des . "\n" : '') . $package::getClassName()
+            ]);
+        }
+
+        echo $t->render();
+    }
+
+    protected function commandInstall()
     {
         $package_name = $this->getFirstBoolArg();
 

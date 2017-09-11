@@ -7,6 +7,7 @@ use Spirit\Console\Commands\CheckMail;
 use Spirit\Console\Commands\Migration;
 use Spirit\Console\Commands\Make;
 use Spirit\Console\Commands\Help;
+use Spirit\Console\Commands\Package;
 
 class Console
 {
@@ -14,6 +15,7 @@ class Console
     protected static $internal = [
         'migration' => Migration::class,
         'check_mail' => CheckMail::class,
+        'package' => Package::class,
         'make' => Make::class,
         'help' => Help::class,
         'app_key' => AppKey::class,
@@ -122,6 +124,7 @@ class Console
         } else {
             $this->command = 'help';
         }
+
     }
 
     public static function getAliases()
@@ -180,6 +183,6 @@ class Console
         echo "\n" . static::textStyle('Run class ' . $className, 'black', 'yellow');
         echo "\n" . str_repeat('=', 50) . "\n";
         $class->exec();
-        echo "\n" . str_repeat('=', 50) . "\n\n";
+        echo "\n";
     }
 }

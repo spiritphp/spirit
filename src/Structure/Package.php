@@ -28,29 +28,28 @@ abstract class Package {
     abstract public function install();
 
 
-    protected function copy($cfg, $dest)
+    protected function copy($src, $dest)
     {
-        if (is_array($cfg)) {
-            foreach($cfg as $_cfg) {
-                $this->copy($_cfg, $dest);
+        if (is_array($src)) {
+            foreach($src as $_src) {
+                $this->copy($_src, $dest);
             }
 
             return;
         }
 
-        $path_parts = pathinfo($dest);
-
-        if (!isset($path_parts['extension'])) {
-            $dest = $dest . basename($cfg);
+        $src_parts = pathinfo($src);
+        if (!isset($src_parts['extension'])) {
+            FileSystem::copyDirectory($src, $dest);
+            return;
         }
 
-        $dest_dir = dirname($dest);
-
-        if (!is_dir($dest_dir)) {
-            mkdir($dest_dir, 0777, true);
+        $dest_parts = pathinfo($dest);
+        if (!isset($dest_parts['extension'])) {
+            $dest = $dest . basename($src);
         }
 
-        FileSystem::copy($cfg, $dest);
+        FileSystem::copy($src, $dest);
     }
 
     protected function copyConfig($src, $to = '')
