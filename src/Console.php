@@ -8,6 +8,7 @@ use Spirit\Console\Commands\Migration;
 use Spirit\Console\Commands\Make;
 use Spirit\Console\Commands\Help;
 use Spirit\Console\Commands\Package;
+use Spirit\Response\Session;
 
 class Console
 {
@@ -107,6 +108,8 @@ class Console
 
     public function __construct($args)
     {
+        Session::initTest();
+
         if (isset($args[1])) {
             $this->command = $args[1];
             unset($args[0], $args[1]);

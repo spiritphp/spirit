@@ -60,17 +60,11 @@ abstract class U
         return Auth::user()->$k;
     }
 
-    public static function acl($role)
+    public static function acl($role, $usingRoot = true)
     {
         if (!Auth::check()) return false;
 
-        $roles = static::get()->roles;
-
-        if (in_array(static::ROLE_ROOT, $roles)) {
-            return true;
-        }
-
-        return in_array($role, $roles);
+        return Auth::user()->acl($role, $usingRoot);
     }
 
     /**

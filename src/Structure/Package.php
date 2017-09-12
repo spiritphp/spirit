@@ -5,7 +5,8 @@ namespace Spirit\Structure;
 use Spirit\Engine;
 use Spirit\FileSystem;
 
-abstract class Package {
+abstract class Package
+{
 
     protected static $name;
 
@@ -21,12 +22,17 @@ abstract class Package {
         return static::$description;
     }
 
-    public static function getClassName() {
+    public static function getClassName()
+    {
         return get_called_class();
     }
 
     abstract public function install();
 
+    protected function packageFolder($to)
+    {
+        return 'packages/' . static::$name . '/' . $to;
+    }
 
     protected function copy($src, $dest)
     {
@@ -40,6 +46,7 @@ abstract class Package {
 
         $src_parts = pathinfo($src);
         if (!isset($src_parts['extension'])) {
+            echo 'COPY ' . $dest . "\n";
             FileSystem::copyDirectory($src, $dest);
             return;
         }
@@ -49,54 +56,59 @@ abstract class Package {
             $dest = $dest . basename($src);
         }
 
+        echo 'COPY ' . $dest . "\n";
         FileSystem::copy($src, $dest);
     }
 
-    protected function copyConfig($src, $to = '')
+    protected function copyConfig($src, $to = null)
     {
+        if (is_null($to)) {
+            $to = static::$name . '.php';
+        }
+
         $dest = Engine::dir()->config . 'packages/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyAssets($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/' . $to;
+        $dest = Engine::dir()->abs_path . 'resources/assets/' . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyAssetsScss($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/scss/' . $to;
+        $dest = Engine::dir()->abs_path . 'resources/assets/scss/' . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyAssetsJs($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/js/' . $to;
+        $dest = Engine::dir()->abs_path . 'resources/assets/js/' . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyPublic($src, $to = '')
     {
-        $dest = Engine::dir()->public . $to;
+        $dest = Engine::dir()->public . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyPublicCss($src, $to = '')
     {
-        $dest = Engine::dir()->public . 'css/' . $to;
+        $dest = Engine::dir()->public . 'css/' . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyPublicJs($src, $to = '')
     {
-        $dest = Engine::dir()->public . 'js/' . $to;
+        $dest = Engine::dir()->public . 'js/' . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 
     protected function copyView($src, $to = '')
     {
-        $dest = Engine::dir()->public . 'views/' . $to;
+        $dest = Engine::dir()->views . $this->packageFolder($to);
         $this->copy($src, $dest);
     }
 }

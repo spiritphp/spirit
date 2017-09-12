@@ -11,6 +11,7 @@ class UndercoverPackage extends Package {
 
     public function install()
     {
-        // TODO скопировть файлы
+        $this->copyAssetsScss(__DIR__ . '/../resources/assets/undercover.scss');
+        $this->copyAssetsScss(__DIR__ . '/../resources/assets/undercover/', 'undercover/');
     }
 }

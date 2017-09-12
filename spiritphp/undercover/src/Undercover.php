@@ -2,17 +2,16 @@
 
 namespace Spirit\Undercover;
 
-class Undercover {
+use Spirit\Auth;
+use Spirit\Constructor;
+use Spirit\Engine;
+use Spirit\Request\URL;
+use Spirit\Structure\Service;
+
+class Undercover extends Service {
 
     protected $config = 'admin';
     protected $defaultConfig = [
-        'css' => [
-            '--static/services/admin--css',
-            'http://fonts.googleapis.com/css?family=Roboto:400,300,700&subset=latin,cyrillic'
-        ],
-        'js' => [
-            '--static/services/admin--js'
-        ],
         'title' => 'Панель управления',
         'menu' => [
             [
@@ -41,32 +40,10 @@ class Undercover {
 
     protected function setAdminConstructor()
     {
-        $css = $this->c('css');
-        $js = $this->c('js');
         $menu = $this->getMenu();
 
         $constructor = Constructor::make()
-            ->add(function() use ($css) {
-                return components\HtmlHead::make()
-                    ->title($this->c('title'))
-                    ->css($css)
-                    ->isMobile()//->favicon('favicon.ico')
-                    ->draw();
-            })
-            ->add(function() {
-                return components\Simple::v('{__SPIRIT__}/services/admin/header.php');
-            })
-            ->add(function() use ($menu) {
-                return components\Simple::v('{__SPIRIT__}/services/admin/menu.php', ['menu' => $menu]);
-            })
-            ->addContent(function($content) {
-                return '<div class="content" id="content">' . $content . '</div>';
-            })
-            ->add(function() use ($js) {
-                return components\HtmlEnd::make()
-                    ->js($js)
-                    ->draw();
-            })
+            ->addLayoutContent('undercover::layout')
             ->addDebug();
 
 
@@ -81,8 +58,9 @@ class Undercover {
         $menu = [];
 
         foreach($array_menu as $k => $v) {
-            if (!U::acl($v['acl']))
+            if (!Auth::user()->acl($v['acl'])) {
                 continue;
+            }
 
             $menu[] = [
                 'title' => $v['title'],

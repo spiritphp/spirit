@@ -25,6 +25,12 @@ class View
 
     public function __construct($file, $data = [])
     {
+        if (strpos($file, '::') !== false) {
+            list($package, $file) = explode('::',$file,2);
+
+            $file = 'packages/' . $package . '/' . $file;
+        }
+
         if (mb_substr($file, 0, 1, "UTF-8") !== '/') {
             $file = Engine::dir()->views . $file;
         }

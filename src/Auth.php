@@ -4,6 +4,7 @@ namespace Spirit;
 
 use Spirit\Auth\DefaultDriver;
 use Spirit\Auth\Driver;
+use Spirit\Common\Models\User;
 
 /**
  * Class Auth
@@ -13,7 +14,7 @@ use Spirit\Auth\Driver;
  * @method static boolean check()
  * @method static boolean guest()
  * @method static integer id()
- * @method static App\Models\User user()
+ * @method static App\Models\User|User user()
  * @method static void loginById()
  * @method static void logout()
  * @method static void setUserCookie($user, $version = null)

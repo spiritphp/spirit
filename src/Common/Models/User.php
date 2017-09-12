@@ -78,4 +78,14 @@ class User extends Model
         return $this->hasMany(User\App::class, 'user_id', 'id');
     }
 
+    public function acl($role, $usingRoot = true)
+    {
+        $roles = $this->roles;
+
+        if ($usingRoot && in_array('root', $roles)) {
+            return true;
+        }
+
+        return in_array($role, $roles);
+    }
 }
