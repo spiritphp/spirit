@@ -5,66 +5,50 @@ namespace Spirit\Undercover;
 use Spirit\Auth;
 use Spirit\Constructor;
 use Spirit\Engine;
-use Spirit\Request\URL;
-use Spirit\Structure\Service;
+use Spirit\Route;
 
-class Undercover extends Service {
+/**
+ * Class Undercover
+ * @package Spirit\Undercover
+ *
+ */
+class Undercover
+{
 
-    protected $config = 'admin';
-    protected $defaultConfig = [
-        'title' => 'Панель управления',
-        'menu' => [
-            [
-                'title' => 'Пользователи',
-                'link' => 'undercover/users',
-                'acl' => 'user'
-            ],
-            [
-                'title' => 'Логи',
-                'link' => 'undercover/logs',
-                'acl' => 'debug'
-            ],
-            [
-                'title' => 'Очиститель',
-                'link' => 'undercover/clean',
-                'acl' => 'clean'
-            ]
-        ]
+    protected static $menu = [
+        [
+            'title' => 'Пользователи',
+            'link' => '/undercover/users',
+            'acl' => 'user'
+        ],
     ];
 
     public static function init()
     {
-        static::getInstance()
-            ->setAdminConstructor();
-    }
-
-    protected function setAdminConstructor()
-    {
-        $menu = $this->getMenu();
-
         $constructor = Constructor::make()
             ->addLayoutContent('undercover::layout')
             ->addDebug();
-
 
         Engine::i()
             ->setConstructor($constructor);
     }
 
-    protected function getMenu()
+    public static function getMenu()
     {
-        $array_menu = $this->c('menu');
-
         $menu = [];
 
-        foreach($array_menu as $k => $v) {
+        foreach(static::$menu as $k => $v) {
             if (!Auth::user()->acl($v['acl'])) {
                 continue;
             }
 
+            if (isset($v['route'])) {
+                $v['link'] = Route::makeUrlForAlias($v['route']);
+            }
+
             $menu[] = [
                 'title' => $v['title'],
-                'link' => URL::make($v['link'])
+                'link' => $v['link']
             ];
 
         }
