@@ -11,7 +11,10 @@ class UndercoverPackage extends Package {
 
     public function install()
     {
-        $this->copyAssetsScss(__DIR__ . '/../resources/assets/undercover.scss');
         $this->copyAssetsScss(__DIR__ . '/../resources/assets/undercover/', 'undercover/');
+        $this->copyAssetsScss(__DIR__ . '/../resources/assets/undercover.scss');
+        $this->copyPublicJs(__DIR__ . '/../resources/assets/js/undercover.js');
+        $this->copyView(__DIR__ . '/../resources/views/layout.php');
+        $this->copyView(__DIR__ . '/../resources/views/common/','common/');
     }
 }

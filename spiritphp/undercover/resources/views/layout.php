@@ -16,7 +16,7 @@
 
 <div class="header header-fly">
     <div class="header__menulink" id="header_menulink">
-        <a href="#" onclick="admin.menu.toggle(); return false;"></a>
+        <a href="#" onclick="Undercover.menuToggle(); return false;"></a>
     </div>
     <div class="header__title">
         <h4>Панель управления</h4>
