@@ -2,6 +2,7 @@
 
 namespace Spirit\Structure;
 
+use Spirit\Console;
 use Spirit\Engine;
 use Spirit\FileSystem;
 
@@ -52,11 +53,10 @@ abstract class Package
             }
 
             if (is_dir($dest)) {
-                echo 'DELETE OLD DIR ' . $dest . "\n";
                 FileSystem::removeDirectory($dest);
             }
 
-            echo 'COPY DIR ' . $dest . "\n";
+            echo '=> ' . str_replace(Engine::i()->abs_path,'',$dest) . "\n";
             FileSystem::copyDirectory($src, $dest);
             return;
         }
@@ -67,11 +67,10 @@ abstract class Package
         }
 
         if (is_file($dest)) {
-            echo 'DELETE OLD ' . $dest . "\n";
             FileSystem::delete($dest);
         }
 
-        echo 'COPY ' . $dest . "\n";
+        echo '=> ' . str_replace(Engine::i()->abs_path,'',$dest) . "\n";
         FileSystem::copy($src, $dest);
     }
 

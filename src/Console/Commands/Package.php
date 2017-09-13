@@ -86,14 +86,14 @@ class Package extends Command
             return;
         }
 
-        echo Console::textStyle($package::getClassName(), 'black', 'yellow') . "\n";
+        echo Console::textStyle('Install ' . $package::getClassName(), 'black', 'yellow') . "\n";
 
         /**
          * @var \Spirit\Structure\Package $packageInstance
          */
         $packageInstance = new $package();
         $packageInstance->install();
-        echo Console::textStyle('Package was installed', 'black', 'green') . "\n";
+        echo "\n" . Console::textStyle('Package was installed', 'black', 'green') . "\n";
     }
 
 }
