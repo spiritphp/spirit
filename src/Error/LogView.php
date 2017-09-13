@@ -3,6 +3,7 @@
 namespace Spirit\Error;
 
 use Spirit\Common\Controllers\ErrorController;
+use Spirit\Console;
 use Spirit\Constructor;
 use Spirit\Engine;
 use Spirit\Func\Trace;
@@ -39,6 +40,13 @@ class LogView extends LogAbstract
         }
 
         if (Engine::i()->isConsole) {
+            echo "\n";
+            echo Console::textStyle(' ERROR ', 'black', 'red') . "\n";
+            echo $this->info->file . ':' . $this->info->line . "\n";
+            echo $this->info->message . "\n";
+
+            echo $this->tableTrace($this->info->trace) . "\n";
+            echo "\n";
             return;
         }
 
