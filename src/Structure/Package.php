@@ -46,7 +46,17 @@ abstract class Package
 
         $src_parts = pathinfo($src);
         if (!isset($src_parts['extension'])) {
-            echo 'COPY ' . $dest . "\n";
+
+            if (!is_dir($src)) {
+                throw new \Exception('Not found dir: ' . $src);
+            }
+
+            if (is_dir($dest)) {
+                echo 'DELETE OLD DIR ' . $dest . "\n";
+                FileSystem::removeDirectory($dest);
+            }
+
+            echo 'COPY DIR ' . $dest . "\n";
             FileSystem::copyDirectory($src, $dest);
             return;
         }
@@ -54,6 +64,11 @@ abstract class Package
         $dest_parts = pathinfo($dest);
         if (!isset($dest_parts['extension'])) {
             $dest = $dest . basename($src);
+        }
+
+        if (is_file($dest)) {
+            echo 'DELETE OLD ' . $dest . "\n";
+            FileSystem::delete($dest);
         }
 
         echo 'COPY ' . $dest . "\n";
