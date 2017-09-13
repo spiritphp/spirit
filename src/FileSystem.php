@@ -150,7 +150,6 @@ class FileSystem
 
 
         while (false !== ($file = readdir($dir))) {
-            echo $file . "\n";
             if (($file !== '.') && ($file !== '..')) {
                 if (is_dir($directory . '/' . $file)) {
                     static::copyDirectory($directory . '/' . $file, $destination . '/' . $file);
