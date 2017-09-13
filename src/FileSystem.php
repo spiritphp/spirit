@@ -139,9 +139,18 @@ class FileSystem
 
     static function copyDirectory($directory, $destination)
     {
+
+        $directory = rtrim($directory, '/');
+
+        if (!is_dir($destination)) {
+            mkdir($destination, 0777, true);
+        }
+
         $dir = opendir($directory);
-        mkdir($destination, 0777, true);
+
+
         while (false !== ($file = readdir($dir))) {
+            echo $file . "\n";
             if (($file !== '.') && ($file !== '..')) {
                 if (is_dir($directory . '/' . $file)) {
                     static::copyDirectory($directory . '/' . $file, $destination . '/' . $file);
