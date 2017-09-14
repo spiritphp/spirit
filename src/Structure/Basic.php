@@ -28,15 +28,8 @@ abstract class Basic
      */
     protected function view($view = null, $data = null)
     {
-
         if (strpos($view, '{__SPIRIT__}') === 0) {
             $view = str_replace('{__SPIRIT__}/', Engine::dir()->spirit_views, $view);
-        } elseif($view[0] !== '/') {
-            $view = Engine::dir()->views . $view;
-        }
-
-        if (!$ext = pathinfo($view, PATHINFO_EXTENSION)) {
-            $view .= '.php';
         }
 
         return View::make($view, $data);
