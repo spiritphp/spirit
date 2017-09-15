@@ -328,7 +328,7 @@ class Engine
 
         $this->initConfig();
 
-        $this->route = Route::init(getenv('IS_SPIRIT') ? null : $this->dir->path_route);
+        $this->route = Route::init(null);
 
         foreach($this->cfg->autoloadFiles as $filepath) {
             $this->load($this->abs_path . $filepath);

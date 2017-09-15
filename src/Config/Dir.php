@@ -16,7 +16,7 @@ use Spirit\Engine;
  * @property string $config_services
  * @property string $config_packages
  * @property string $app
- * @property string $path_route
+ * @property string $routes
  * @property string $migrations
  * @property string $views
  * @property string $views_component
@@ -59,7 +59,7 @@ class Dir {
         $this->config_packages = $this->config. 'packages/';
 
         $this->app = $this->abs_path . 'app/';
-        $this->path_route = $this->app . 'route.php';
+        $this->routes = $this->abs_path . 'routes/';
 
         // миграции
         $this->migrations = $this->abs_path . 'migrations/';
