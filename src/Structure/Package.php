@@ -2,7 +2,6 @@
 
 namespace Spirit\Structure;
 
-use Spirit\Console;
 use Spirit\Engine;
 use Spirit\FileSystem;
 
@@ -26,6 +25,34 @@ abstract class Package
     public static function getClassName()
     {
         return get_called_class();
+    }
+
+    /**
+     * @var array
+     */
+    protected $args = [];
+
+    public function __construct($args)
+    {
+        $this->args = $args;
+    }
+
+    protected function arg($key)
+    {
+        if (!isset($this->args[$key])) return null;
+
+        return $this->args[$key];
+    }
+
+    protected function getFirstBoolArg()
+    {
+        foreach ($this->args as $key => $value) {
+            if ($value === true) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 
     abstract public function install();
@@ -123,6 +150,24 @@ abstract class Package
     protected function copyView($src, $to = '')
     {
         $dest = Engine::dir()->views . $this->packageFolder($to);
+        $this->copy($src, $dest);
+    }
+
+    protected function copyController($src, $to = '')
+    {
+        $dest = Engine::dir()->abs_path . 'app/Controllers/' . $to;
+        $this->copy($src, $dest);
+    }
+
+    protected function copyModel($src, $to = '')
+    {
+        $dest = Engine::dir()->abs_path . 'app/Models/' . $to;
+        $this->copy($src, $dest);
+    }
+
+    protected function copyMigration($src, $to = '')
+    {
+        $dest = Engine::dir()->abs_path . 'migrations/' . $to;
         $this->copy($src, $dest);
     }
 }

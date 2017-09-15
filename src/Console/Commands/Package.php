@@ -91,7 +91,7 @@ class Package extends Command
         /**
          * @var \Spirit\Structure\Package $packageInstance
          */
-        $packageInstance = new $package();
+        $packageInstance = new $package($this->args);
         $packageInstance->install();
         echo "\n" . Console::textStyle('Package was installed', 'black', 'green') . "\n";
     }
