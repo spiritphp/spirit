@@ -5,7 +5,8 @@ namespace Spirit\Route;
 use Spirit\Structure\Middleware as MiddlewareStructure;
 use Spirit\Route\Middleware;
 
-class MiddlewareProvider {
+class MiddlewareProvider
+{
 
     /**
      * @var MiddlewareStructure[]|callable[]
@@ -43,22 +44,29 @@ class MiddlewareProvider {
 
         $result = true;
         foreach($middlewareList as $middleware) {
-            $vars = [];
-            if (strpos($middleware, ':') !== false) {
-                $vars = explode(':', $middleware);
+
+            $vars = null;
+            if (is_string($middleware) && strpos($middleware, ':') !== false) {
+                $vars = explode(':', $middleware, 2);
                 $middleware = $vars[0];
-                unset($vars[0]);
+                $vars = $vars[1];
             }
 
-            /**
-             * @var MiddlewareStructure|callable $middlewareCallback
-             */
-            $middlewareCallback = $this->middleware[$middleware];
-
-            if (is_callable($middlewareCallback)) {
-                $result = $middlewareCallback(...$vars);
+            if (is_object($middleware) && $middleware instanceof MiddlewareStructure) {
+                $result = $middleware::getInstance()->handle($vars);
             } else {
-                $result = $middlewareCallback::getInstance()->handle(...$vars);
+                /**
+                 * @var MiddlewareStructure|callable $middlewareCallback
+                 */
+                $middlewareCallback = $this->middleware[$middleware];
+
+                if (is_array($middlewareCallback)) {
+                    $result = $this->check($middlewareCallback);
+                } else if (is_callable($middlewareCallback)) {
+                    $result = $middlewareCallback($vars);
+                } else {
+                    $result = $middlewareCallback::getInstance()->handle($vars);
+                }
             }
 
             if ($result !== true) {
@@ -69,4 +77,5 @@ class MiddlewareProvider {
 
         return $result;
     }
+
 }

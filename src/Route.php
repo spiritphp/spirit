@@ -49,6 +49,14 @@ class Route
         return static::$routing;
     }
 
+    /**
+     * @return  Routing
+     */
+    public static function routing()
+    {
+        return static::$routing;
+    }
+
     public static function __callStatic($name, $arguments)
     {
         if (!static::$routing) return null;

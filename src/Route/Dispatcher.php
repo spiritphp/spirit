@@ -40,10 +40,6 @@ class Dispatcher {
             $className = $this->route->className;
             $methodName = $this->route->methodName;
 
-            if (strpos($className, '\\') === false) {
-                $className = 'App\Controllers\\' . $className;
-            }
-
             $class = new $className();
             $logs['class'] = $className;
             $logs['method'] = $methodName;
