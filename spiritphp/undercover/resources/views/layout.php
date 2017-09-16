@@ -30,15 +30,11 @@
 <div class="menu menu-fly" id="menu">
     <div class="__main">
         <ul>
-            <li>
-                <a href="http://home.dev.border.ru/undercover/users">Пользователи</a>
-            </li>
-            <li>
-                <a href="http://home.dev.border.ru/undercover/logs">Логи</a>
-            </li>
-            <li>
-                <a href="http://home.dev.border.ru/undercover/clean">Очиститель</a>
-            </li>
+            <? foreach ($menu as $key => $item): ?>
+                <li>
+                    <a href="<?= $item['link']; ?>"><?= $item['title']; ?></a>
+                </li>
+            <? endforeach; ?>
         </ul>
     </div>
 </div>
