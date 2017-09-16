@@ -35,6 +35,13 @@ class Trace
         if ($vardump) {
             var_dump($data);
         } else {
+            if (is_null($data)) {
+                $data = 'null';
+            } elseif ($data === false) {
+                $data = 'false';
+            } elseif($data === true) {
+                $data = 'true';
+            }
             print_r($data);
         }
 
