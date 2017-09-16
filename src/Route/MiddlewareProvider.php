@@ -25,7 +25,7 @@ class MiddlewareProvider
 
     /**
      * @param $key
-     * @param callable|MiddlewareStructure $middlewareClassName
+     * @param callable|MiddlewareStructure|array $middlewareClassName
      */
     public function add($key, $middlewareClassName)
     {
@@ -52,21 +52,21 @@ class MiddlewareProvider
                 $vars = $vars[1];
             }
 
-            if (is_object($middleware) && $middleware instanceof MiddlewareStructure) {
-                $result = $middleware::getInstance()->handle($vars);
-            } else {
-                /**
-                 * @var MiddlewareStructure|callable $middlewareCallback
-                 */
+            /**
+             * @var MiddlewareStructure|callable $middlewareCallback
+             */
+            if (is_string($middleware) && isset($this->middleware[$middleware])) {
                 $middlewareCallback = $this->middleware[$middleware];
+            } else {
+                $middlewareCallback = $middleware;
+            }
 
-                if (is_array($middlewareCallback)) {
-                    $result = $this->check($middlewareCallback);
-                } else if (is_callable($middlewareCallback)) {
-                    $result = $middlewareCallback($vars);
-                } else {
-                    $result = $middlewareCallback::getInstance()->handle($vars);
-                }
+            if (is_array($middlewareCallback)) {
+                $result = $this->check($middlewareCallback);
+            } else if (is_callable($middlewareCallback)) {
+                $result = $middlewareCallback($vars);
+            } else {
+                $result = $middlewareCallback::getInstance()->handle($vars);
             }
 
             if ($result !== true) {

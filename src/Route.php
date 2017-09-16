@@ -36,8 +36,8 @@ class Route
     {
         $initialRoutes = null;
         if (Engine::cfg()->enableCommonRoute) {
-            $initialRoutes = Engine::i()
-                ->includeFile(Engine::i()->spirit_path . 'Common/route.php');
+//            $initialRoutes = Engine::i()
+//                ->includeFile(Engine::i()->spirit_path . 'Common/route.php');
         }
 
         static::$routing = static::make($initialRoutes);

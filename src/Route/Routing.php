@@ -2,6 +2,7 @@
 
 namespace Spirit\Route;
 
+use Spirit\Collection;
 use Spirit\Structure\Model;
 use Spirit\Request;
 use Spirit\Structure\Middleware as MiddlewareStructure;
@@ -89,11 +90,11 @@ class Routing
         }
 
         if (count($this->parentPrefixArr)) {
-            $path = implode('/', $this->parentPrefixArr) . '/' . ($path !== '/' ? $path : '');
+            $path = implode('/', $this->parentPrefixArr) . ($path !== '/' && $path !== '' ? '/' . $path : '');
         }
 
         if (count($this->parentNamespaceArr)) {
-            $namespace = implode('/', $this->parentNamespaceArr) . '/';
+            $namespace = implode('\\', $this->parentNamespaceArr) . '\\';
 
             if (is_array($uses)) {
                 $uses[0] = $namespace . $uses[0];
@@ -157,7 +158,16 @@ class Routing
 
     public function getRoutes()
     {
-        return $this->routes;
+        $routes = $this->routes;
+
+        foreach($routes as $path => &$route) {
+            if (is_object($route['uses']) && ($route['uses'] instanceof \Closure)) {
+                $route['uses'] = 'function(){}';
+            }
+        }
+        unset($route);
+
+        return Collection::make($routes);
     }
 
 
@@ -170,6 +180,8 @@ class Routing
     {
         if (!$path) {
             $path = '/';
+        } elseif($path[0] !== '/') {
+            $path = '/' . $path;
         }
 
         $route = null;
