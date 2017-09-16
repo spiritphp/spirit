@@ -15,7 +15,8 @@
             "Spirit\\": "src/"
         },
         "files": [
-            "src/helpers.php"
+            "src/helpers.php",
+            "src/alias.php"
         ]
     },
     "minimum-stability": "dev",
