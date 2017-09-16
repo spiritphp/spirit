@@ -15,18 +15,10 @@ use Spirit\Route;
 class Undercover
 {
 
-    protected static $menu = [
-        [
-            'title' => 'Пользователи',
-            'link' => '/undercover/users',
-            'acl' => 'user'
-        ],
-    ];
-
     public static function init()
     {
         $constructor = Constructor::make()
-            ->addLayoutContent('undercover::layout')
+            ->addLayoutContent('undercover/layout')
             ->addDebug();
 
         Engine::i()
@@ -35,10 +27,12 @@ class Undercover
 
     public static function getMenu()
     {
+        $cfgMenu = Engine::i()->includeFile(Engine::dir()->config_packages . 'undercover.php');
+
         $menu = [];
 
-        foreach(static::$menu as $k => $v) {
-            if (!Auth::user()->acl($v['acl'])) {
+        foreach($cfgMenu as $k => $v) {
+            if (!Auth::user()->acl($v['role'])) {
                 continue;
             }
 
