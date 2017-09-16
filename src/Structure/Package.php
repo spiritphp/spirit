@@ -55,12 +55,12 @@ abstract class Package
         return null;
     }
 
-    abstract public function install();
-
-    protected function packageFolder($to)
+    protected function toPackage($to = '')
     {
         return 'packages/' . static::$name . '/' . $to;
     }
+
+    abstract public function install();
 
     protected function copy($src, $dest)
     {
@@ -113,43 +113,43 @@ abstract class Package
 
     protected function copyAssets($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/' . $this->packageFolder($to);
+        $dest = Engine::dir()->abs_path . 'resources/assets/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyAssetsScss($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/scss/' . $this->packageFolder($to);
+        $dest = Engine::dir()->abs_path . 'resources/assets/scss/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyAssetsJs($src, $to = '')
     {
-        $dest = Engine::dir()->abs_path . 'resources/assets/js/' . $this->packageFolder($to);
+        $dest = Engine::dir()->abs_path . 'resources/assets/js/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyPublic($src, $to = '')
     {
-        $dest = Engine::dir()->public . $this->packageFolder($to);
+        $dest = Engine::dir()->public . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyPublicCss($src, $to = '')
     {
-        $dest = Engine::dir()->public . 'css/' . $this->packageFolder($to);
+        $dest = Engine::dir()->public . 'css/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyPublicJs($src, $to = '')
     {
-        $dest = Engine::dir()->public . 'js/' . $this->packageFolder($to);
+        $dest = Engine::dir()->public . 'js/' . $to;
         $this->copy($src, $dest);
     }
 
     protected function copyView($src, $to = '')
     {
-        $dest = Engine::dir()->views . $this->packageFolder($to);
+        $dest = Engine::dir()->views . $to;
         $this->copy($src, $dest);
     }
 
@@ -168,6 +168,12 @@ abstract class Package
     protected function copyMigration($src, $to = '')
     {
         $dest = Engine::dir()->abs_path . 'migrations/' . $to;
+        $this->copy($src, $dest);
+    }
+
+    protected function copyRoute($src, $to = '')
+    {
+        $dest = Engine::dir()->routes . $to;
         $this->copy($src, $dest);
     }
 }
