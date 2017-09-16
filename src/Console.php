@@ -183,8 +183,9 @@ class Console
          */
         $class = new $className($this->args, $ext_command);
 
-        echo "\n" . static::textStyle('Run class ' . $className, 'black', 'yellow');
-        echo "\n" . str_repeat('=', 50) . "\n";
+//        echo "\n" . static::textStyle('Run class ' . $className, 'black', 'yellow');
+//        echo "\n" . str_repeat('=', 50) . "\n";
+        echo "\n";
         $class->exec();
         echo "\n";
     }
