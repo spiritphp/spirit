@@ -2,7 +2,6 @@
 
 namespace Spirit\View;
 
-use Spirit\Engine;
 use Spirit\Func\Str;
 use Spirit\View;
 
@@ -39,14 +38,6 @@ class Layout
 
     public function __construct($path)
     {
-        if (mb_substr($path, 0, 1, "UTF-8") !== '/') {
-            $path = Engine::dir()->views . $path;
-        }
-
-        if (!pathinfo($path, PATHINFO_EXTENSION)) {
-            $path .= '.php';
-        }
-
         $this->path = $path;
     }
 
