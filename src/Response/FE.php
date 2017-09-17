@@ -142,9 +142,13 @@ class FE
             $ver = time();
         }
 
-        if (strpos($path, '--static') === 0) {
-            $path = str_replace("--static/", "/--static/js/", $path);
-        } elseif (!preg_match("/^https?\:/i", $path)) {
+        if (strpos($path,'::') !== false) {
+            $pathArr = explode('::',$path, 2);
+
+            $path = 'packages/' . $pathArr[0] . '/' . $pathArr[1];
+        }
+
+        if (!preg_match("/^https?\:/i", $path)) {
             $path = Engine::i()->url . 'js/' . $path;
         }
 
@@ -183,9 +187,13 @@ class FE
             $ver = time();
         }
 
-        if (strpos($path, '--static') === 0) {
-            $path = str_replace("--static/", "/--static/css/", $path);
-        } elseif (!preg_match("/^https?\:/i", $path)) {
+        if (strpos($path,'::') !== false) {
+            $pathArr = explode('::',$path, 2);
+
+            $path = 'packages/' . $pathArr[0] . '/' . $pathArr[1];
+        }
+
+        if (!preg_match("/^https?\:/i", $path)) {
             $path = Engine::i()->url . 'css/' . $path;
         }
 
