@@ -142,13 +142,13 @@ if (!function_exists('route')) {
 if (!function_exists('css')) {
     function css($v, $ver = null)
     {
-        \Spirit\Response\FE::css($v, $ver);
+        return \Spirit\Response\FE::css($v, $ver);
     }
 }
 
 if (!function_exists('js')) {
     function js($v, $ver = null)
     {
-        \Spirit\Response\FE::js($v, $ver);
+        return \Spirit\Response\FE::js($v, $ver);
     }
 }
