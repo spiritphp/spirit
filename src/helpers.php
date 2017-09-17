@@ -1,4 +1,5 @@
 <?php
+
 use Spirit\View\Template;
 
 if (!function_exists('dd')) {
@@ -136,4 +137,18 @@ if (!function_exists('route')) {
         return \Spirit\Engine::route()->makeUrlForAlias($id, $vars);
     }
 
+}
+
+if (!function_exists('css')) {
+    function css($v, $ver = null)
+    {
+        \Spirit\Response\FE::css($v, $ver);
+    }
+}
+
+if (!function_exists('js')) {
+    function js($v, $ver = null)
+    {
+        \Spirit\Response\FE::js($v, $ver);
+    }
 }
