@@ -143,9 +143,15 @@ class Routing
             $this->parentNamespaceArr[] = $groupNamespace;
         }
 
-        $this->parentPrefixArr[] = $prefix;
+        if ($prefix) {
+            $this->parentPrefixArr[] = $prefix;
+        }
+
         $callback();
-        array_pop($this->parentPrefixArr);
+
+        if ($prefix) {
+            array_pop($this->parentPrefixArr);
+        }
 
         if ($groupMiddleware) {
             $this->parentMiddlewareArr = $oldMiddleware;
@@ -181,7 +187,7 @@ class Routing
         if (!$path) {
             $path = '/';
         } elseif($path[0] !== '/') {
-            $path = '/' . $path;
+            //$path = '/' . $path;
         }
 
         $route = null;
