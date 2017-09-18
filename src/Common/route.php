@@ -4,40 +4,6 @@ return [
         'methods' => ['get','post'],
         'uses' => ['\Spirit\Common\Controllers\ErrorController', 'common']
     ],
-    'captcha/{unique_id}' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'captcha'],
-    ],
-    'login' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'login'],
-        'middleware' => ['guest']
-    ],
-    'logout' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'logout'],
-        'middleware' => ['auth']
-    ],
-    'registration' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'registration'],
-        'middleware' => ['guest']
-    ],
-    'recovery/{hash?}' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'recovery'],
-        'middleware' => ['guest']
-    ],
-    'auth/{type?}' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'auth'],
-        'middleware' => ['guest']
-    ],
-    'activation/{code}' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['AuthController', 'activation'],
-        'middleware' => ['guest']
-    ],
 
     // USER
     'undercover/users' => [

@@ -440,7 +440,7 @@ class Form extends Service
         }
     }
 
-    public function draw($view = null, $data = [])
+    public function draw($view = 'spirit::services/form/default.php', $data = [])
     {
         $this->init();
 
@@ -455,10 +455,6 @@ class Form extends Service
 
         if ($this->fileAllowed) {
             $data['form']['enctype'] = 'multipart/form-data';
-        }
-
-        if (is_null($view)) {
-            $view = '{__SPIRIT__}/services/form/default.php';
         }
 
         return $this->view($view, $data)->render();

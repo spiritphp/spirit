@@ -182,7 +182,7 @@ class Table extends Service
         return $column;
     }
 
-    public function draw($view = null)
+    public function draw($view = 'spirit::services/table/default.php')
     {
         $data = [
             'items' => $this->getPrepareList(),
@@ -193,10 +193,6 @@ class Table extends Service
             if ($this->data->checkPaginate()) {
                 $data['page'] = $this->data->paginate()->draw();
             }
-        }
-
-        if (is_null($view)) {
-            $view = '{__SPIRIT__}/services/table/default.php';
         }
 
         return $this->view($view, $data)->render();

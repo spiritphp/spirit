@@ -223,22 +223,15 @@ class Paginate
             $this->isSimpleEnd = true;
         } else {
             array_pop($items);
-            //$items = array_slice($items,0,$this->countVisibleItems,true);
         }
     }
 
-    public function draw($view = null)
+    public function draw($view = 'spirit::paginate/default.php')
     {
         if ($this->isSimple) {
             $this->buildSimple();
         } else {
             $this->build();
-        }
-
-        if (is_null($view)) {
-            $view = Engine::dir()->spirit_views . 'paginate/default.php';
-        } else {
-            $view = Engine::dir()->views . $view;
         }
 
         return View::make($view, $this->data)->render();
