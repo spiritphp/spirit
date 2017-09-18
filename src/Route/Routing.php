@@ -186,8 +186,6 @@ class Routing
     {
         if (!$path) {
             $path = '/';
-        } elseif($path[0] !== '/') {
-            //$path = '/' . $path;
         }
 
         $route = null;

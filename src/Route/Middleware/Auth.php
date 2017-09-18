@@ -12,7 +12,7 @@ class Auth extends Middleware
     public function handle($var = null)
     {
         if (!AuthSrc::check()) {
-            Redirect::to('login');
+            Redirect::to('login')->send();
         }
 
         return true;

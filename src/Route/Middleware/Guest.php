@@ -12,7 +12,7 @@ class Guest extends Middleware
     public function handle($var = null)
     {
         if (Auth::check()) {
-            Redirect::home();
+            Redirect::home()->send();
         }
 
         return true;
