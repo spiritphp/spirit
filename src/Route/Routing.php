@@ -208,10 +208,10 @@ class Routing
     }
 
     /**
-     * @param $key
+     * @param string|array $key
      * @param callable|MiddlewareStructure $middlewareClassName
      */
-    public function addMiddleware($key, $middlewareClassName)
+    public function addMiddleware($key, $middlewareClassName = null)
     {
         $this->middleware->add($key, $middlewareClassName);
     }

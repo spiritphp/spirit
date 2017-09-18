@@ -17,9 +17,16 @@ abstract class RoutePlugin extends Plugin {
 
     protected function boot()
     {
-        $this->routes(Route::routing());
+        $routing = Route::routing();
+
+        $this->middleware($routing);
+        $this->routes($routing);
     }
 
     abstract protected function routes(Routing $routing);
+
+    protected function middleware(Routing $routing) {
+
+    }
 
 }

@@ -3,7 +3,6 @@
 namespace Spirit\Route;
 
 use Spirit\Structure\Middleware as MiddlewareStructure;
-use Spirit\Route\Middleware;
 
 class MiddlewareProvider
 {
@@ -12,11 +11,7 @@ class MiddlewareProvider
      * @var MiddlewareStructure[]|callable[]
      */
     protected $middleware = [
-        'auth' => Middleware\Auth::class,
-        'guest' => Middleware\Guest::class,
-        'role' => Middleware\Role::class,
-        'throttle' => Middleware\Throttle::class,
-        'token' => Middleware\Token::class,
+        //'auth' => Middleware\Auth::class,
     ];
 
     public function __construct()
@@ -24,12 +19,16 @@ class MiddlewareProvider
     }
 
     /**
-     * @param $key
+     * @param string|array $key
      * @param callable|MiddlewareStructure|array $middlewareClassName
      */
-    public function add($key, $middlewareClassName)
+    public function add($key, $middlewareClassName = null)
     {
-        $this->middleware[$key] = $middlewareClassName;
+        if (is_array($key)) {
+            $this->middleware = array_merge($this->middleware, $key);
+        } else {
+            $this->middleware[$key] = $middlewareClassName;
+        }
     }
 
     /**
