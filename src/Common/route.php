@@ -4,23 +4,9 @@ return [
         'methods' => ['get','post'],
         'uses' => ['\Spirit\Common\Controllers\ErrorController', 'common']
     ],
-    'debug/phpinfo' => [
-        'methods' => ['get'],
-        'uses' => ['\Spirit\Common\Controllers\DebugController', 'phpinfo'],
-        'middleware' => ['role:debug']
-    ],
-    'debug/checkmail' => [
-        'methods' => ['get', 'post'],
-        'uses' => ['\Spirit\Common\Controllers\DebugController', 'checkmail'],
-        'middleware' => ['role:debug']
-    ],
     'captcha/{unique_id}' => [
         'methods' => ['post', 'get'],
         'uses' => ['AuthController', 'captcha'],
-    ],
-    '--static/{path}' => [
-        'methods' => ['get'],
-        'uses' => ['\Spirit\Common\Controllers\AssetsController', 'read'],
     ],
     'login' => [
         'methods' => ['post', 'get'],
@@ -51,13 +37,6 @@ return [
         'methods' => ['post', 'get'],
         'uses' => ['AuthController', 'activation'],
         'middleware' => ['guest']
-    ],
-
-    // ADMIN
-    'undercover' => [
-        'methods' => ['post', 'get'],
-        'uses' => ['\Spirit\Common\Controllers\AdminController', 'startAdmin'],
-        'middleware' => ['role:panel']
     ],
 
     // USER

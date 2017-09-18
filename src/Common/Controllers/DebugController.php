@@ -14,12 +14,6 @@ class DebugController extends Controller
 
     use NavPath;
 
-     public function phpinfo()
-    {
-        echo phpinfo();
-        exit();
-    }
-
     public function logsAdmin()
     {
         $maindir = Engine::dir()->logs;

@@ -2,7 +2,7 @@
 
 namespace Spirit\Common\Controllers\Auth;
 
-use Spirit\Auth\App\Platform;
+use Spirit\Auth\AppDriver\Platform;
 use Spirit\Common\Models\User;
 use Spirit\Request\URL;
 

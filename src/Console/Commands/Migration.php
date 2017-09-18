@@ -183,7 +183,7 @@ class Migration extends Command
 
         $file_name = date("Y_m_d_His") . '__' . $className . '.php';
 
-        $migration_file = include(dirname(__FILE__) . '/migration/migration_struct.php');
+        $migration_file = require Engine::dir()->spirit_resources . '/migrations/migration_struct.php';
 
         $migration_file = strtr($migration_file, [
                 '{{CLASS_NAME}}' => $className,
