@@ -27,10 +27,6 @@ abstract class Service extends Basic
 
     public function view($view = null, $data = null)
     {
-        if ($view[0] !== '/' && $view[0] !== '{') {
-            $view = Engine::dir()->views_service . $view;
-        }
-
         return parent::view($view, $data);
     }
 
