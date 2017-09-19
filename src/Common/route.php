@@ -43,11 +43,4 @@ return [
         'uses' => ['\Spirit\Common\Controllers\DebugController', 'logsAdmin'],
         'middleware' => ['role:debug']
     ],
-
-    // CLEAR
-    'undercover/clean/{type?}' => [
-        'methods' => ['get', 'post'],
-        'uses' => ['\Spirit\Common\Controllers\CleanController', 'cleanAdmin'],
-        'middleware' => ['role:clean']
-    ],
 ];
