@@ -68,13 +68,6 @@ abstract class Controller extends Basic implements \JsonSerializable
         Error::abort($errorNumber, $message);
     }
 
-    protected function adminview($view = null, $data = null)
-    {
-        Admin::init();
-
-        return $this->view($view, $data);
-    }
-
     /**
      * @param null|string $view
      * @param null $data
