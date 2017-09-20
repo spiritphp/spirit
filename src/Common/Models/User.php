@@ -10,14 +10,12 @@ use Spirit\Structure\Model;
  * @package Spirit\Common\Models
  *
  * @property string $uid
- * @property string $login
- * @property string $email
  * @property string $token
+ * @property string $email
  * @property string $password
  * @property string|array $roles
  * @property string $version
  * @property string $block
- * @property string $activated_at
  * @property boolean $online
  * @property string $date_online
  *

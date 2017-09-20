@@ -3,6 +3,7 @@
 namespace Spirit;
 
 use Spirit\Auth\DefaultDriver;
+use Spirit\Common\Models\User;
 use Spirit\Response\Session\FileHandler;
 use Spirit\Structure\Package;
 use Spirit\Structure\Plugin;
@@ -130,6 +131,11 @@ class Config
      * @var Package[]
      */
     public $packages = [];
+
+    /**
+     * @var User
+     */
+    public $userModel = \App\Models\User;
 
     public function __construct()
     {

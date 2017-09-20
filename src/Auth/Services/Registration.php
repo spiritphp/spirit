@@ -2,7 +2,6 @@
 
 namespace Spirit\Auth\Services;
 
-use App\Models\User;
 use Spirit\Auth\Hash;
 use Spirit\Common\Models\User as CommonUser;
 use Spirit\Request\URL;
@@ -10,37 +9,10 @@ use Spirit\Services\Mail;
 use Spirit\DB;
 use Spirit\Func;
 
-class Registration
+class Registration extends Service
 {
-
-    protected $login;
     protected $email;
     protected $password;
-    protected $needActivation = false;
-    protected $isTemp = false;
-
-    protected $messageActivationTitle;
-    protected $messageActivationView;
-
-    protected $messageWelcomeView;
-    protected $messageWelcomeTitle;
-
-    public function __construct()
-    {
-
-    }
-
-    public static function make()
-    {
-        return new Registration();
-    }
-
-    public function setLogin($login)
-    {
-        $this->login = $login;
-
-        return $this;
-    }
 
     public function setPassword($password)
     {
@@ -56,45 +28,14 @@ class Registration
         return $this;
     }
 
-    public function withActivation()
-    {
-        $this->needActivation = true;
-
-        return $this;
-    }
-
-    public function sendActivation($title = false, $messageView = false)
-    {
-        $this->messageActivationView = $messageView;
-        $this->messageActivationTitle = $title;
-
-        return $this;
-    }
-
-    public function sendWelcome($title = false, $messageView = false)
-    {
-        $this->messageWelcomeView = $messageView;
-        $this->messageWelcomeTitle = $title;
-
-        return $this;
-    }
-
-    public function repeatActivationForUserID()
-    {
-
-    }
-
-    /**
-     * @return User|CommonUser
-     */
     public function create()
     {
-        DB::beginTransaction();
+        $userClass = static::userModel();
 
         /**
-         * @var User|CommonUser $user
+         * @var CommonUser $user
          */
-        $user = new User();
+        $user = new $userClass();
 
         if ($this->login || $this->email) {
             $user->login = $this->login ? $this->login : $this->email;
@@ -110,34 +51,6 @@ class Registration
         $user->save();
 
         $user_id = $user->id;
-
-        DB::commit();
-
-        if ($this->email) {
-            if ($this->messageWelcomeView) {
-
-                Mail::createMessage($this->messageWelcomeView, [
-                    'user_id' => $user_id,
-                    'uid' => $user->uid,
-                    'email' => $this->email,
-                    'login' => $this->login,
-                    'url' => URL::current()
-                ])
-                    ->to($this->email)
-                    ->subject($this->messageWelcomeTitle)
-                    ->send();
-            }
-
-            if ($this->needActivation && $this->messageActivationView) {
-
-                Activation::make()
-                    ->setUserID($user_id)
-                    ->setUID($user->uid)
-                    ->setEmail($this->email)
-                    ->setLogin($this->login)
-                    ->send($this->messageWelcomeTitle, $this->messageActivationView);
-            }
-        }
 
         return $user;
     }
