@@ -15,7 +15,6 @@ use Spirit\Structure\Model;
  * @property string $password
  * @property string|array $roles
  * @property string $version
- * @property string $block
  * @property boolean $online
  * @property string $date_online
  *
@@ -23,19 +22,13 @@ use Spirit\Structure\Model;
  */
 class User extends Model
 {
+    use Model\SoftRemoveTrait;
+
     const ONLINE_MINUTE = 15;
 
     protected $timestamps = true;
 
     protected $table = 'users';
-
-    protected $fillable = [
-        '*'
-    ];
-
-    protected $protect = [
-        //'active'
-    ];
 
     protected $rules = [
         'email' => 'required|email'

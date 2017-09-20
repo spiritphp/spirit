@@ -35,16 +35,11 @@ class DefaultDriver extends Driver {
 
     protected function attemptAuth()
     {
-        $this->loginByCookieOrSession();
-    }
-
-    protected function loginByCookieOrSession()
-    {
-        if (!$userInfo = $this->getUserInfo()) {
+        if (!$requestInfo = $this->requestInfo()) {
             return;
         }
 
-        $this->user = $this->initUser($userInfo['id'], $userInfo['version']);
+        $this->user = $this->initUser($requestInfo['id'], $requestInfo['version']);
         $this->setOnline(true);
         $this->log();
 
@@ -57,26 +52,22 @@ class DefaultDriver extends Driver {
         }
     }
 
-    protected function getUserInfo()
+    protected function requestBySession()
     {
-        if (
-            $this->session['id'] &&
-            $this->session['version']
-        ) {
-            $this->authFromSession = true;
-
-            return [
-                'id' => $this->session['id'],
-                'version' => $this->session['version']
-            ];
+        if (!$this->session['id'] || !$this->session['version']) {
+            return null;
         }
 
-        if (!$this->cfg()->auth['type'] === 'cookie') {
-            return false;
-        }
+        return [
+            'id' => $this->session['id'],
+            'version' => $this->session['version']
+        ];
+    }
 
+    protected function requestByCookie()
+    {
         if (!$cookie = Cookie::get('user')) {
-            return false;
+            return null;
         }
 
         $arr = unserialize($cookie);
@@ -91,8 +82,8 @@ class DefaultDriver extends Driver {
 
         if (!hash_equals($clientHash, Client::hash())) {
             $this->logout();
-            Redirect::to('login?other_browser')->send();
-            return false;
+            Redirect::to('/?error_browser')->send();
+            return null;
         }
 
         return [
@@ -101,21 +92,31 @@ class DefaultDriver extends Driver {
         ];
     }
 
-    protected function initUser($id, $version)
+    protected function requestInfo()
     {
-        $user = User::find($id);
-        if (!$user) {
-            Redirect::to('login?error_0002')->send();
+        if ($info = $this->requestBySession()) {
+            $this->authFromSession = true;
+            return $info;
+        }
+
+        if ($this->cfg()->auth['type'] !== 'cookie') {
             return null;
         }
 
-        if ($user->block) {
-            Redirect::to('login?block')->send();
+        return $this->requestByCookie();
+    }
+
+    protected function initUser($id, $version)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            Redirect::to('/?error_user')->send();
             return null;
         }
 
         if (!hash_equals($user->version, $version)) {
-            Redirect::to('login?error_version')->send();
+            Redirect::to('/?error_version')->send();
             return null;
         }
 

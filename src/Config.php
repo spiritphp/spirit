@@ -22,12 +22,6 @@ class Config
      */
     public $controllerError;
 
-    /**
-     * Enable common route from vendor
-     * @var bool
-     */
-    public $enableCommonRoute = true;
-
     public $defaultDBConnection = DB::DRIVER_POSTGRESQL;
 
     public $connections = [
@@ -135,7 +129,8 @@ class Config
     /**
      * @var User
      */
-    public $userModel = \App\Models\User;
+    //public $userModel = \App\Models\User;
+    public $userModel = User::class;
 
     public function __construct()
     {

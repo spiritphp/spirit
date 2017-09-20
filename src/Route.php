@@ -34,13 +34,7 @@ class Route
 
     public static function init($path = null)
     {
-        $initialRoutes = null;
-        if (Engine::cfg()->enableCommonRoute) {
-//            $initialRoutes = Engine::i()
-//                ->includeFile(Engine::i()->spirit_path . 'Common/route.php');
-        }
-
-        static::$routing = static::make($initialRoutes);
+        static::$routing = static::make();
 
         if ($path) {
             Engine::i()->includeFile($path);
