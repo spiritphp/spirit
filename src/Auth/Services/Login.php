@@ -15,10 +15,6 @@ class Login
     protected $password;
     protected $appHash;
 
-    protected $appAlias;
-    protected $appUserID;
-    protected $appToken;
-
     public static function make()
     {
         return new Login();
@@ -58,57 +54,26 @@ class Login
         return $this;
     }
 
-    public function setApp($alias, $id, $token)
-    {
-        $this->appAlias = $alias;
-        $this->appUserID = $id;
-        $this->appToken = $token;
-
-        return $this;
-    }
-
     /**
      * @return User|CommonUser|null
      */
     public function getUser()
     {
         /**
-         * @var User $user
+         * @var User|CommonUser $user
          */
 
-        if ($this->appUserID && $this->appAlias && $this->appToken) {
-            $hash = Hash::app($this->appAlias, $this->appUserID);
+        $user = false;
+        if ($this->login) {
+            $user = User::where('login', $this->login)->first();
+        }
 
-            $appUser = DB::table('user_app')
-                ->where('hash', $hash)
-                ->first();
+        if (!$user && $this->email) {
+            $user = User::where('email', $this->email)->first();
+        }
 
-            if (!$appUser) return null;
-
-            DB::table('user_app')
-                ->where('id', $appUser['id'])
-                ->update([
-                    'token' => $this->appToken
-                ]);
-
-            $user_id = $appUser['user_id'];
-
-            $user = User::find($user_id);
-
-        } else {
-
-            $user = false;
-            if ($this->login) {
-                $user = User::where('login', $this->login)->first();
-            }
-
-            if (!$user && $this->email) {
-                $user = User::where('email', $this->email)->first();
-            }
-
-            if ($user) {
-                if (!password_verify($this->password, $user->password)) return null;
-            }
+        if ($user) {
+            if (!password_verify($this->password, $user->password)) return null;
         }
 
         return $user;

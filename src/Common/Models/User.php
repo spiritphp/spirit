@@ -15,16 +15,11 @@ use Spirit\Structure\Model;
  * @property string $token
  * @property string $password
  * @property string|array $roles
- * @property string $ip
- * @property string $date
  * @property string $version
  * @property string $block
- * @property boolean $active
+ * @property string $activated_at
  * @property boolean $online
  * @property string $date_online
- *
- * @property user\Info $info
- * @property user\App[] $apps
  *
  * @property string $fix
  */
@@ -60,22 +55,12 @@ class User extends Model
         return (time() - strtotime($this->date_online)) < static::ONLINE_MINUTE * 60;
     }
 
-    public function info()
-    {
-        return $this->hasOne(User\Info::class, 'user_id', 'id');
-    }
-
     /**
      * @return \Spirit\Structure\Model\Relations\HasMany|Builder
      */
     public function logs()
     {
         return $this->hasMany(User\Log::class, 'user_id', 'id');
-    }
-
-    public function apps()
-    {
-        return $this->hasMany(User\App::class, 'user_id', 'id');
     }
 
     public function acl($role, $usingRoot = true)

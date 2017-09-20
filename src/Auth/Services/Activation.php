@@ -5,6 +5,7 @@ namespace Spirit\Auth\Services;
 use Spirit\Auth\Hash;
 use Spirit\Common\Models\User as CommonUser;
 use App\Models\User;
+use Spirit\DB;
 use Spirit\Engine;
 use Spirit\Services\Mail;
 use Spirit\Request\URL;
@@ -50,13 +51,16 @@ class Activation
         // Проверка
         if (!password_verify($this->userUID, $this->hash)) return null;
 
-        $user = User::where('uid',$this->userID)->first();
+        /**
+         * @var CommonUser $user
+         */
+        $user = User::where('uid',$this->userUID)->first();
 
         if (!$user) return null;
 
-        if ($user->active) return null;
+        if ($user->activated_at) return null;
 
-        $user->active = true;
+        $user->activated_at = DB::raw('NOW()');
         $user->save();
 
         return $user;

@@ -4,13 +4,11 @@ namespace Spirit\Auth\Services;
 
 use App\Models\User;
 use Spirit\Auth\Hash;
-use Spirit\Common\Models\User as commonUser;
+use Spirit\Common\Models\User as CommonUser;
 use Spirit\Request\URL;
 use Spirit\Services\Mail;
-use Spirit\Request\Client;
 use Spirit\DB;
 use Spirit\Func;
-use Spirit\View;
 
 class Registration
 {
@@ -20,12 +18,6 @@ class Registration
     protected $password;
     protected $needActivation = false;
     protected $isTemp = false;
-
-    protected $fieldData;
-
-    protected $appAlias;
-    protected $appUserID;
-    protected $appToken;
 
     protected $messageActivationTitle;
     protected $messageActivationView;
@@ -87,36 +79,20 @@ class Registration
         return $this;
     }
 
-    public function setApp($alias, $id, $token)
-    {
-        $this->appAlias = $alias;
-        $this->appUserID = $id;
-        $this->appToken = $token;
-
-        return $this;
-    }
-
-    public function setField($data)
-    {
-        $this->fieldData = $data;
-
-        return $this;
-    }
-
     public function repeatActivationForUserID()
     {
 
     }
 
     /**
-     * @return User|\Spirit\Common\Models\User
+     * @return User|CommonUser
      */
     public function create()
     {
         DB::beginTransaction();
 
         /**
-         * @var User|\Spirit\Common\Models\User $user
+         * @var User|CommonUser $user
          */
         $user = new User();
 
@@ -130,30 +106,10 @@ class Registration
         }
 
         $user->uid = Func\Func::unique_id(8);
-        $user->ip = Client::getIP();
-        $user->active = $this->needActivation ? false : true;
         $user->token = hash('sha256', uniqid(mt_rand(0, 10000000)));
         $user->save();
 
         $user_id = $user->id;
-
-        if ($this->appUserID && $this->appAlias && $this->appToken) {
-
-            $app = new commonUser\App();
-            $app->app_user_id = $this->appUserID;
-            $app->alias = $this->appAlias;
-            $app->token = $this->appToken;
-            $app->hash = Hash::app($this->appAlias, $this->appUserID);
-            $user->apps()
-                ->save($app);
-        }
-
-        $info = new commonUser\Info();
-        if ($this->fieldData) {
-            $info->info = $this->fieldData;
-        }
-        $user->info()
-            ->save($info);
 
         DB::commit();
 
@@ -172,7 +128,7 @@ class Registration
                     ->send();
             }
 
-            if ($this->messageActivationView) {
+            if ($this->needActivation && $this->messageActivationView) {
 
                 Activation::make()
                     ->setUserID($user_id)

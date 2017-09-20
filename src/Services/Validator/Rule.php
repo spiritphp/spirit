@@ -31,7 +31,6 @@ class Rule
     const TYPE_REGEX = 'regex'; // :regular
     const TYPE_MIN = 'min'; // :min
     const TYPE_MAX = 'max'; // :max
-    const TYPE_CAPTCHA = 'captcha'; // :captcha_session_name
     const TYPE_IMAGE = 'image'; // :type
 
     /**
@@ -67,7 +66,6 @@ class Rule
         self::TYPE_NUMERIC => 'Значение в поле <b>{{ATTR}}</b> должно быть числом',
         self::TYPE_CONFIRMED => 'Значения в поле <b>{{ATTR}}</b> и в поле  <b>{{ATTR_SAME}}</b> должны совпадать',
         self::TYPE_REGEX => 'Неверное значение в поле <b>{{ATTR}}</b>',
-        self::TYPE_CAPTCHA => 'Неверные цифры с картинки',
         self::TYPE_MIN => [
             'string' => 'Значение в поле <b>{{ATTR}}</b> должно быть больше {{MIN}} символов',
             'numeric' => 'Значение в поле <b>{{ATTR}}</b> должно быть больше {{MIN}}',
@@ -308,19 +306,6 @@ class Rule
     protected function checkImage($value, $options)
     {
         return ($value instanceof File) && $value->isImage((isset($options[0]) ? $options[0] : false));
-    }
-
-    protected function checkCaptcha($value, $options, $attr)
-    {
-        $captcha_unique_id_key = $attr . '_captcha_uid';
-        $item = $this->validator->getItem($captcha_unique_id_key);
-        $captcha_unique_id_value = $item ? $item[Validator::VALUE] : null;
-
-        if ($captcha_unique_id_value) {
-            return Captcha::check($captcha_unique_id_value, $value);
-        }
-
-        return Captcha::checkSession($value, isset($options[0]) ? $options[0] : null);
     }
 
     protected function checkDateFormat($value, $options)
