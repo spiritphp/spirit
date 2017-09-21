@@ -2,45 +2,119 @@
 
 namespace Spirit\Auth;
 
+use Spirit\Auth\DefaultDriver\Log;
+use Spirit\Auth\DefaultDriver\Password;
+use Spirit\Auth\DefaultDriver\Storage;
+use Spirit\Common\Models\User;
+use Spirit\DB;
+use Spirit\Engine;
+
 class DefaultDriver extends Driver {
 
-    public function check()
+    /**
+     * @var Storage
+     */
+    protected $storage;
+
+    public function __construct()
     {
-        // TODO: Implement check() method.
+        $this->storage = new Storage();
     }
 
     public function init()
     {
-        // TODO: Implement init() method.
+        if (!$this->storage->id) return;
+
+        if (!$this->user = $this->initUser()) {
+            return;
+        }
+
+        $this->setOnline(true);
+        $this->log();
     }
 
-    public function guest()
+    protected function initUser()
     {
-        // TODO: Implement guest() method.
+        $userModel = static::userModel();
+
+        /**
+         * @var User
+         */
+        $user = $userModel::find($this->storage->id);
+
+        if (!$user) {
+            return null;
+        }
+
+        if (!hash_equals($user->version, $this->storage->version)) {
+            return null;
+        }
+
+        return $user;
     }
 
-    public function id()
+    public function setOnline($isOnline = true)
     {
-        // TODO: Implement id() method.
+        if ($isOnline) {
+            $onlineTime = $this->storage->online_time;
+
+            if ($onlineTime && (time() - $onlineTime) < Engine::cfg()->auth['upd_online_per_time']) {
+                return;
+            }
+        }
+
+        $this->user->date_online = DB::raw('NOW()');
+        $this->user->save();
+        $this->storage->online_time = time();
     }
 
-    public function user()
+    protected function log()
     {
-        // TODO: Implement user() method.
-    }
+        if (!Engine::cfg()->auth['log']) return;
 
-    public function setUserCookie($user_id, $version = null)
-    {
-        // TODO: Implement setUserCookie() method.
-    }
+        if ($this->storage->log) return;
 
-    public function loginById()
-    {
-        // TODO: Implement loginById() method.
+        Log::write($this->user);
+
+        $this->storage->log = true;
     }
 
     public function logout()
     {
-        // TODO: Implement logout() method.
+        $this->setOnline(false);
+        $this->user = null;
+        $this->storage->forget();
+    }
+
+    public function loginById($id, $remember = false)
+    {
+        return $this->authorize(['id' => $id], $remember);
+    }
+
+    public function authorize($filter, $remember = false)
+    {
+
+    }
+
+    public function register($filter, $autoAuthorize = true, $remember = false)
+    {
+        // TODO: Implement register() method.
+    }
+
+    public function setPassword($password, $version = null)
+    {
+        if ($version === true) {
+            $version = mt_rand(0,9999999999);
+        }
+
+        $this->user->password = Password::init($password);
+
+        if ($version) {
+            $this->user->version = $version;
+            $this->storage->version = $version;
+            $this->storage->save();
+        }
+
+        $this->user->save();
     }
 }
