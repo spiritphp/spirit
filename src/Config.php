@@ -4,7 +4,7 @@ namespace Spirit;
 
 use Spirit\Auth\DefaultDriver;
 use Spirit\Common\Models\User;
-use Spirit\Response\Session\FileHandler;
+use Spirit\Request\Session\FileHandler;
 use Spirit\Structure\Package;
 use Spirit\Structure\Plugin;
 use Spirit\Structure\Provider;

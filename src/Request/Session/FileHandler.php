@@ -1,6 +1,6 @@
 <?php
 
-namespace Spirit\Response\Session;
+namespace Spirit\Request\Session;
 use Spirit\Engine;
 
 class FileHandler extends \SessionHandler implements \SessionHandlerInterface

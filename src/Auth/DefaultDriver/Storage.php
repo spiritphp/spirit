@@ -2,7 +2,7 @@
 
 namespace Spirit\Auth\DefaultDriver;
 
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 
 class Storage {
 

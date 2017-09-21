@@ -3,7 +3,7 @@
 namespace Spirit\Route\Middleware;
 
 use Spirit\Request;
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 use Spirit\Structure\Middleware;
 
 class Token extends Middleware {

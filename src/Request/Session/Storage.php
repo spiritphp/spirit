@@ -1,8 +1,8 @@
 <?php
 
-namespace Spirit\Response\Session;
+namespace Spirit\Request\Session;
 
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 use Spirit\Structure\Arrayable;
 
 class Storage implements \ArrayAccess, Arrayable {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spirit\Response\Session;
+namespace Spirit\Request\Session;
 
 use Spirit\Func\Arr;
 use Spirit\Func\Hash;
