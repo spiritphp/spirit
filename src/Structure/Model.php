@@ -121,7 +121,7 @@ abstract class Model implements ArrayAccess, Arrayable, JsonSerializable, Jsonab
      * @var Builder
      */
     protected $queryBuilder;
-    protected $timestamps = false;
+    protected $timestamps = true;
 
     public function __construct($data = [], $fill = true)
     {

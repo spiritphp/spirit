@@ -39,7 +39,6 @@ class User extends Model
     ];
 
     protected $mutatorJson = ['roles'];
-    protected $mutatorBoolean = ['active'];
 
     public function getOnlineData()
     {
@@ -52,6 +51,14 @@ class User extends Model
     public function logs()
     {
         return $this->hasMany(User\Log::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Spirit\Structure\Model\Relations\HasMany|Builder
+     */
+    public function recoveries()
+    {
+        return $this->hasMany(User\Recovery::class, 'user_id', 'id');
     }
 
     public function acl($role, $usingRoot = true)

@@ -4,7 +4,7 @@ namespace Spirit\Auth;
 
 use Spirit\Auth\DefaultDriver\Log;
 use Spirit\Auth\DefaultDriver\Password;
-use Spirit\Auth\DefaultDriver\Storage;
+use Spirit\Auth\DefaultDriver\Recovery;
 use Spirit\Common\Models\User;
 use Spirit\DB;
 use Spirit\Engine;
@@ -12,16 +12,6 @@ use Spirit\Func;
 
 class DefaultDriver extends Driver
 {
-
-    /**
-     * @var Storage
-     */
-    protected $storage;
-
-    public function __construct()
-    {
-        $this->storage = new Storage();
-    }
 
     public function init()
     {
@@ -163,15 +153,14 @@ class DefaultDriver extends Driver
             $this->loginById($user->id, $remember);
         }
 
+        Log::write($user);
+
         return $user;
     }
 
-    public function setPassword($password, $version = null)
+    public function setPassword($password)
     {
-        if ($version === true) {
-            $version = mt_rand(0, 9999999999);
-        }
-
+        $version = uniqid();
         $this->user->password = Password::init($password);
 
         if ($version) {
@@ -181,5 +170,13 @@ class DefaultDriver extends Driver
         }
 
         $this->user->save();
+    }
+
+    /**
+     * @return RecoveryInterface
+     */
+    public function recovery()
+    {
+        return Recovery::make($this->user);
     }
 }

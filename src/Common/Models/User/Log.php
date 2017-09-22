@@ -2,6 +2,7 @@
 
 namespace Spirit\Common\Models\User;
 
+use Spirit\Engine;
 use Spirit\Structure\Model;
 use Spirit\Common\Models\User;
 
@@ -22,11 +23,10 @@ class Log extends Model
 {
     protected $timestamps = true;
     protected $table = 'user_logs';
-    protected $primaryKey = 'user_id';
 
     public function user()
     {
-        return $this->belongTo(User::class, 'id', 'user_id');
+        return $this->belongTo(Engine::cfg()->userModel, 'id', 'user_id');
     }
 
     public function getDateData($v)

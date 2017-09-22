@@ -1,6 +1,6 @@
 <?php
 
-namespace Spirit\Auth\DefaultDriver;
+namespace Spirit\Auth;
 
 use Spirit\Engine;
 use Spirit\Request\Client;
@@ -19,7 +19,6 @@ use Spirit\Request\Session;
  */
 class Storage
 {
-
     protected $session;
     protected $data;
 

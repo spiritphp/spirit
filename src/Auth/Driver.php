@@ -7,6 +7,15 @@ use Spirit\Engine;
 
 abstract class Driver
 {
+    /**
+     * @var Storage
+     */
+    protected $storage;
+
+    public function __construct()
+    {
+        $this->storage = new Storage();
+    }
 
     /**
      * @var User
@@ -35,9 +44,20 @@ abstract class Driver
         $this->user->id;
     }
 
+    /**
+     * @return User
+     */
     public function user()
     {
-        $this->user;
+        return $this->user;
+    }
+
+    /**
+     * @return Storage
+     */
+    public function storage()
+    {
+        return $this->storage;
     }
 
     abstract public function loginById($id, $remember = false);
@@ -47,5 +67,9 @@ abstract class Driver
     abstract public function register($filter, $autoAuthorize = true, $remember = false);
 
     abstract public function logout();
+
+    abstract public function setPassword($password);
+
+    abstract public function recovery();
 
 }
