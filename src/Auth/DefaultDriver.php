@@ -8,8 +8,10 @@ use Spirit\Auth\DefaultDriver\Storage;
 use Spirit\Common\Models\User;
 use Spirit\DB;
 use Spirit\Engine;
+use Spirit\Func;
 
-class DefaultDriver extends Driver {
+class DefaultDriver extends Driver
+{
 
     /**
      * @var Storage
@@ -86,25 +88,88 @@ class DefaultDriver extends Driver {
         $this->storage->forget();
     }
 
+    /**
+     * @param integer $id
+     * @param bool $remember
+     * @return null|User
+     */
     public function loginById($id, $remember = false)
     {
         return $this->authorize(['id' => $id], $remember);
     }
 
+    /**
+     * @param array $filter
+     * @param bool $remember
+     * @return null|User
+     */
     public function authorize($filter, $remember = false)
     {
+        $password = null;
+        if (isset($filter['password'])) {
+            $password = $filter['password'];
+            unset($filter['password']);
+        }
 
+        $classModel = static::userModel();
+
+        $query = $classModel::make();
+
+        foreach($filter as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        /**
+         * @var User $user
+         */
+        if (!$user = $query->first()) {
+            return null;
+        }
+
+        if ($password && !Password::check($password, $user->password)) {
+            return null;
+        }
+
+        $this->storage->version = $user->version;
+        $this->storage->id = $user->id;
+
+        if ($remember) {
+            $this->storage->save();
+        }
+
+        return $user;
     }
 
-    public function register($filter, $autoAuthorize = true, $remember = false)
+    /**
+     * @param array $fields
+     * @param bool $autoAuthorize
+     * @param bool $remember
+     * @return User
+     */
+    public function register($fields, $autoAuthorize = true, $remember = false)
     {
-        // TODO: Implement register() method.
+        $classModel = static::userModel();
+
+        if (isset($fields['password'])) {
+            $fields['password'] = Password::init($fields['password']);
+        }
+
+        $user = $classModel::make($fields);
+        $user->uid = Func\Func::unique_id(10);
+        $user->token = hash('sha256', uniqid(mt_rand(0, 10000000)));
+        $user->save();
+
+        if ($autoAuthorize) {
+            $this->loginById($user->id, $remember);
+        }
+
+        return $user;
     }
 
     public function setPassword($password, $version = null)
     {
         if ($version === true) {
-            $version = mt_rand(0,9999999999);
+            $version = mt_rand(0, 9999999999);
         }
 
         $this->user->password = Password::init($password);
