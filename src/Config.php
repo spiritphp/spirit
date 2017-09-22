@@ -3,7 +3,8 @@
 namespace Spirit;
 
 use Spirit\Auth\DefaultDriver;
-use Spirit\Response\Session\FileHandler;
+use Spirit\Common\Models\User;
+use Spirit\Request\Session\FileHandler;
 use Spirit\Structure\Package;
 use Spirit\Structure\Plugin;
 use Spirit\Structure\Provider;
@@ -20,12 +21,6 @@ class Config
      * @var \Spirit\Common\Controllers\ErrorController
      */
     public $controllerError;
-
-    /**
-     * Enable common route from vendor
-     * @var bool
-     */
-    public $enableCommonRoute = true;
 
     public $defaultDBConnection = DB::DRIVER_POSTGRESQL;
 
@@ -130,6 +125,12 @@ class Config
      * @var Package[]
      */
     public $packages = [];
+
+    /**
+     * @var User
+     */
+    //public $userModel = \App\Models\User;
+    public $userModel = User::class;
 
     public function __construct()
     {

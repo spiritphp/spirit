@@ -1,10 +1,10 @@
 <?php
 
-namespace Spirit\Response;
+namespace Spirit\Request;
 
 use Spirit\Engine;
-use Spirit\Response\Session\Box;
-use Spirit\Response\Session\Storage;
+use Spirit\Request\Session\Box;
+use Spirit\Request\Session\Storage;
 
 /**
  * Class Session

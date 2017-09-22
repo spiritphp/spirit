@@ -2,21 +2,49 @@
 
 namespace Spirit\Auth;
 
-abstract class Driver {
+use Spirit\Common\Models\User;
+use Spirit\Engine;
 
-    abstract public function check();
+abstract class Driver
+{
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    public static function userModel()
+    {
+        return Engine::cfg()->userModel;
+    }
+
+    public function check()
+    {
+        return !is_null($this->user);
+    }
 
     abstract public function init();
 
-    abstract public function guest();
+    public function guest()
+    {
+        return is_null($this->user);
+    }
 
-    abstract public function id();
+    public function id()
+    {
+        $this->user->id;
+    }
 
-    abstract public function user();
+    public function user()
+    {
+        $this->user;
+    }
 
-    abstract public function setUserCookie($user_id, $version = null);
+    abstract public function loginById($id, $remember = false);
 
-    abstract public function loginById();
+    abstract public function authorize($filter, $remember = false);
+
+    abstract public function register($filter, $autoAuthorize = true, $remember = false);
 
     abstract public function logout();
 

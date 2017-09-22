@@ -8,7 +8,7 @@ use Spirit\Console\Commands\Migration;
 use Spirit\Console\Commands\Make;
 use Spirit\Console\Commands\Help;
 use Spirit\Console\Commands\Package;
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 
 class Console
 {

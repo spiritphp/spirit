@@ -2,7 +2,7 @@
 
 namespace Spirit\Request;
 
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 
 class Client
 {

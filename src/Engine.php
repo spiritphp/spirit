@@ -5,7 +5,7 @@ namespace Spirit;
 use Spirit\Config\Dir;
 use Spirit\Func\TimeLine;
 use Spirit\Response\Redirect;
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 use Spirit\Route\Dispatcher;
 
 /**

@@ -6,23 +6,12 @@ use App\Models\User;
 use Spirit\Auth;
 use Spirit\DB;
 
-class Password
+class Password extends Service
 {
-
     protected $userID;
     protected $password;
     protected $versionCurrent;
     protected $versionNew;
-
-    public static function make()
-    {
-        return new Password();
-    }
-
-    public function __construct()
-    {
-
-    }
 
     public function setUserID($v)
     {
@@ -51,7 +40,12 @@ class Password
 
         if (!$this->versionNew) $this->versionNew = mt_rand(0, 999999999);
 
-        $user = User::find($this->userID);
+        $userClass = static::userModel();
+
+        /**
+         * @var \Spirit\Common\Models\User
+         */
+        $user = $userClass::find($this->userID);
 
         if (!$user) return false;
 
@@ -61,7 +55,7 @@ class Password
 
         $user->password = Auth\Hash::password($password);
         $user->version = DB::raw($this->versionNew . '::varchar');
-        $user->saveIf('version', DB::raw($this->versionCurrent . '::varchar'));
+        $user->save();
 
         if ($user->save()) {
             Auth::setUserCookie($this->userID, $user->version);

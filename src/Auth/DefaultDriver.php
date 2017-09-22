@@ -2,120 +2,51 @@
 
 namespace Spirit\Auth;
 
-use Spirit\Common\Models\User\Log;
-use Spirit\Config\Cfg;
+use Spirit\Auth\DefaultDriver\Log;
+use Spirit\Auth\DefaultDriver\Password;
+use Spirit\Auth\DefaultDriver\Storage;
+use Spirit\Common\Models\User;
 use Spirit\DB;
-use Spirit\Request\Client;
-use Spirit\Request\Cookie;
-use Spirit\Response\Redirect;
-use Spirit\Response\Session;
-use App\Models\User;
+use Spirit\Engine;
 
 class DefaultDriver extends Driver {
 
-    use Cfg;
-
     /**
-     * @var Session\Storage
+     * @var Storage
      */
-    protected $session;
-
-    /**
-     * @var User|\Spirit\Common\Models\User
-     */
-    protected $user;
-
-    protected $authFromSession = false;
-
+    protected $storage;
 
     public function __construct()
     {
-        $this->session = Session::storage('user');
+        $this->storage = new Storage();
     }
 
-    protected function attemptAuth()
+    public function init()
     {
-        $this->loginByCookieOrSession();
-    }
+        if (!$this->storage->id) return;
 
-    protected function loginByCookieOrSession()
-    {
-        if (!$userInfo = $this->getUserInfo()) {
+        if (!$this->user = $this->initUser()) {
             return;
         }
 
-        $this->user = $this->initUser($userInfo['id'], $userInfo['version']);
         $this->setOnline(true);
         $this->log();
-
-        $this->session['id'] = $this->user->id;
-        $this->session['version'] = $this->user->version;
-
-        // Установка куки
-        if ($this->cfg()->auth['type'] === 'cookie' && !$this->authFromSession) {
-            static::setUserCookie($this->user->id, $this->user->version);
-        }
     }
 
-    protected function getUserInfo()
+    protected function initUser()
     {
-        if (
-            $this->session['id'] &&
-            $this->session['version']
-        ) {
-            $this->authFromSession = true;
+        $userModel = static::userModel();
 
-            return [
-                'id' => $this->session['id'],
-                'version' => $this->session['version']
-            ];
-        }
+        /**
+         * @var User
+         */
+        $user = $userModel::find($this->storage->id);
 
-        if (!$this->cfg()->auth['type'] === 'cookie') {
-            return false;
-        }
-
-        if (!$cookie = Cookie::get('user')) {
-            return false;
-        }
-
-        $arr = unserialize($cookie);
-
-        if (count($arr) != 3) {
-            throw new \Exception('Error count of array auth-cookie');
-        }
-
-        $id = $arr[0];
-        $version = $arr[1];
-        $clientHash = $arr[2];
-
-        if (!hash_equals($clientHash, Client::hash())) {
-            $this->logout();
-            Redirect::to('login?other_browser')->send();
-            return false;
-        }
-
-        return [
-            'id' => $id,
-            'version' => $version
-        ];
-    }
-
-    protected function initUser($id, $version)
-    {
-        $user = User::find($id);
         if (!$user) {
-            Redirect::to('login?error_0002')->send();
             return null;
         }
 
-        if ($user->block) {
-            Redirect::to('login?block')->send();
-            return null;
-        }
-
-        if (!hash_equals($user->version, $version)) {
-            Redirect::to('login?error_version')->send();
+        if (!hash_equals($user->version, $this->storage->version)) {
             return null;
         }
 
@@ -125,101 +56,65 @@ class DefaultDriver extends Driver {
     public function setOnline($isOnline = true)
     {
         if ($isOnline) {
-            if (
-                isset($this->session['online_time']) &&
-                (time() - $this->session['online_time']) < $this->cfg()->auth['upd_online_per_time']
-            ) {
+            $onlineTime = $this->storage->online_time;
+
+            if ($onlineTime && (time() - $onlineTime) < Engine::cfg()->auth['upd_online_per_time']) {
                 return;
             }
         }
 
         $this->user->date_online = DB::raw('NOW()');
         $this->user->save();
-
-        $this->session['online_time'] = time();
+        $this->storage->online_time = time();
     }
 
     protected function log()
     {
-        if (!static::cfg()->auth['log']) return;
+        if (!Engine::cfg()->auth['log']) return;
 
-        if (isset($this->session['log'])) return;
+        if ($this->storage->log) return;
 
-        $ip = Client::getIP();
+        Log::write($this->user);
 
-        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-            $_SERVER['HTTP_USER_AGENT'] = 'Unknown';
-        }
-
-        $hash = md5($this->user->id . $ip . $_SERVER['HTTP_USER_AGENT']);
-
-        /**
-         * @var Log $log
-         */
-        $log = $this->user->logs()->where('hash',$hash)->first();
-
-        if ($log) {
-            $log->touch();
-        } else {
-            $log = Log::make([
-                'ip' => (DB::isDriver(DB::DRIVER_POSTGRESQL) ? DB::raw("'" . $ip . "'::inet") : $ip),
-                'user_agent' => mb_substr($_SERVER['HTTP_USER_AGENT'], 0, 1000, "UTF-8"),
-                'hash' => $hash
-            ]);
-
-            $this->user->logs()->save($log);
-        }
-
-        $this->session['log'] = true;
-    }
-
-    public function check()
-    {
-        return !is_null($this->user);
-    }
-
-    public function guest()
-    {
-        return is_null($this->user);
-    }
-
-    public function id()
-    {
-        return $this->user->id;
-    }
-
-    public function user()
-    {
-        return $this->user;
-    }
-
-    public function loginById()
-    {
-        // TODO: Implement loginById() method.
+        $this->storage->log = true;
     }
 
     public function logout()
     {
         $this->setOnline(false);
-
-        Cookie::forget('user');
-        Session::forget('user');
+        $this->user = null;
+        $this->storage->forget();
     }
 
-    public function init()
+    public function loginById($id, $remember = false)
     {
-        $this->attemptAuth();
+        return $this->authorize(['id' => $id], $remember);
     }
 
-    public function setUserCookie($user_id, $version = null)
+    public function authorize($filter, $remember = false)
     {
-        if (!$version) {
-            $user = User::find($user_id);
-            $version = $user->version;
+
+    }
+
+    public function register($filter, $autoAuthorize = true, $remember = false)
+    {
+        // TODO: Implement register() method.
+    }
+
+    public function setPassword($password, $version = null)
+    {
+        if ($version === true) {
+            $version = mt_rand(0,9999999999);
         }
 
-        $cookie = serialize([$user_id,$version,Client::hash()]);
+        $this->user->password = Password::init($password);
 
-        Cookie::set('user', $cookie);
+        if ($version) {
+            $this->user->version = $version;
+            $this->storage->version = $version;
+            $this->storage->save();
+        }
+
+        $this->user->save();
     }
 }

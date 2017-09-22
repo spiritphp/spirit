@@ -270,35 +270,4 @@ final class ValidatorRelationTest extends TestCase
             $table->drop();
         });
     }
-
-    public function testCaptcha()
-    {
-        $uid = Captcha::make()->getUniqueId();
-        $this->assertNotNull($uid);
-
-        $string = Captcha::make()->uniqueId($uid)->draw();
-        $this->assertInternalType('string', $string);
-
-        $r = [
-            'v' => 'captcha'
-        ];
-
-        $this->assertTrue(Validator::make([
-            'v_captcha_uid' => $uid,
-            'v' => $string
-        ], $r)->check());
-
-
-        $string = Captcha::make()->draw();
-        $this->assertInternalType('string', $string);
-
-        $r = [
-            'v' => 'captcha'
-        ];
-
-        $this->assertTrue(Validator::make([
-            //'v_captcha_uid' => $uid,
-            'v' => $string
-        ], $r)->check());
-    }
 }

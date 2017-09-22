@@ -10,7 +10,7 @@ use Spirit\Error\LogView;
 use Spirit\Error\LogWriter;
 use Spirit\Error\Pause;
 use Spirit\Request\Client;
-use Spirit\Response\Session;
+use Spirit\Request\Session;
 
 class Error
 {
