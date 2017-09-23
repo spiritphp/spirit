@@ -185,7 +185,7 @@ class RequestProvider
         if ($method === 'POST') {
             if ($m = $this->headers->get('X-HTTP-METHOD-OVERRIDE')) {
                 $method = strtoupper($m);
-            } else if (!Request::$disableHttpMethod && isset($_REQUEST['_method'])) {
+            } else if (isset($_REQUEST['_method'])) {
                 $method = strtoupper($_REQUEST['_method']);
             }
         }
