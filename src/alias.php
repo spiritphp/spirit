@@ -1,3 +1,3 @@
 <?php
 
-class Route extends Spirit\Route {};
+class Route extends Spirit\Route {}

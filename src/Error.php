@@ -170,6 +170,8 @@ class Error
 
     public function complete()
     {
+        ob_get_clean();
+
         $info = $this->info = new Info();
 
         $info->status_code = $this->statusCode;
