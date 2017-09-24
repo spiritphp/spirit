@@ -171,6 +171,7 @@ class Engine
         $this->logTimeLine('plugins');
 
         if ($this->isTesting) {
+            Session::initTest();
             return;
         }
 
@@ -267,19 +268,6 @@ class Engine
         return require $path;
     }
 
-    public function handlerError($errno, $errstr = null, $errfile = null, $errline = null)
-    {
-        Error::make($errno, $errstr, $errfile, $errline);
-    }
-
-    /**
-     * @param \Error $error
-     */
-    public function handlerErrorObject($error)
-    {
-        Error::makeFromObject($error);
-    }
-
     /**
      * @param Constructor $constructor
      */
@@ -319,7 +307,8 @@ class Engine
         define('SPIRIT_KEY', str_replace('.', '_', $this->host));
 
         $this->initAutoload();
-        $this->initErrorHandler();
+
+        Error::init();
 
         $this->dir = new Dir($this);
         $this->dir->init();
@@ -341,14 +330,6 @@ class Engine
             $this,
             'autoload'
         ]);
-    }
-
-    protected function initErrorHandler()
-    {
-        if (!$this->isTesting) {
-            set_error_handler([$this, 'handlerError']);
-            set_exception_handler([$this, 'handlerErrorObject']);
-        }
     }
 
     protected function initConfig()

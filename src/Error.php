@@ -36,6 +36,12 @@ class Error
         set_exception_handler([$this, 'handlerErrorObject']);
     }
 
+    public static function init()
+    {
+        set_error_handler([Error::class, 'make']);
+        set_exception_handler([Error::class, 'makeFromObject']);
+    }
+
     public function handlerError($errno, $errstr = null, $errfile = null, $errline = null)
     {
         if (!Engine::i()->isConsole && !Engine::i()->isDebug) {
