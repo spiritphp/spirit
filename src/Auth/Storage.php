@@ -114,7 +114,7 @@ class Storage
 
     public function save()
     {
-        if (!Engine::cfg()->auth['type'] === 'cookie') {
+        if (Engine::cfg()->auth['type'] === 'cookie') {
             $this->setUserCookie($this->id, $this->version);
         }
     }
