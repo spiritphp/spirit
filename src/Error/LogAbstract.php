@@ -73,7 +73,7 @@ abstract class LogAbstract
             ;
         }
 
-        return "\n-- QUERIES --\n" . implode("\n", $newData);
+        return count($newData) ? "\n-- QUERIES --\n" . implode("\n", $newData) : '';
     }
 
     protected function tableTrace($data)
@@ -82,6 +82,6 @@ abstract class LogAbstract
             return '#' . $key . ' ' . $value;// . "\n" . str_repeat('-', 50);
         }, array_keys($data), $data);
 
-        return "\n-- TRACE --\n" . implode("\n", $new_data);
+        return count($new_data) ? "\n-- TRACE --\n" . implode("\n", $new_data) : '';
     }
 }

@@ -52,12 +52,12 @@ final class RouteAliasTest extends TestCase
 
     public function testDefault()
     {
-        $this->assertEquals(static::$routing->makeUrlForAlias('test_book','1'), 'test/book/1');
-        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['book' => 1]), 'test/book/1');
-        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['book' => 1, 'author' => 2]), 'test/book/1?author=2');
-        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['author' => 2]), 'test/book/2');
+        $this->assertEquals(static::$routing->makeUrlForAlias('test_book','1'), '/test/book/1');
+        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['book' => 1]), '/test/book/1');
+        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['book' => 1, 'author' => 2]), '/test/book/1?author=2');
+        $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['author' => 2]), '/test/book/2');
         $this->assertEquals(static::$routing->makeUrlForAlias('test_book',['book' => 1, 'author' => 2, 'date' => 3]),
-        'test/book/1?author=2&date=3');
+        '/test/book/1?author=2&date=3');
     }
 
 }

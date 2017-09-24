@@ -24,6 +24,7 @@ class TestBookModel extends Model
 class TestTagModel extends Model
 {
     protected $table = 'test_relation_model__tags';
+    protected $timestamps = false;
 
     public function books()
     {
@@ -34,6 +35,7 @@ class TestTagModel extends Model
 class TestCategoryModel extends Model
 {
     protected $table = 'test_relation_model__categories';
+    protected $timestamps = false;
 
     public function books()
     {
@@ -71,6 +73,7 @@ final class ModelRelationTest extends TestCase
         if (!db_n\Schema::hasTable(__getTableNameCategories())) {
             db_n\Schema::create(__getTableNameCategories(), function(db_n\schema\Table $table) {
                 $table->serial('id')
+                    ->timestamps()
                     ->string('name')
                 ;
             });
@@ -79,6 +82,7 @@ final class ModelRelationTest extends TestCase
         if (!db_n\Schema::hasTable(__getTableNameTags())) {
             db_n\Schema::create(__getTableNameTags(), function(db_n\schema\Table $table) {
                 $table->serial('id')
+                    ->timestamps()
                     ->string('name')
                 ;
             });
@@ -105,6 +109,7 @@ final class ModelRelationTest extends TestCase
         if (!db_n\Schema::hasTable(__getTableNameBookTag())) {
             db_n\Schema::create(__getTableNameBookTag(), function(db_n\schema\Table $table) {
                 $table->serial('id')
+                    ->timestamps()
                     ->integer('book_id')->index()
                     ->integer('tag_id')->index()
                     ->integer('status')->default(1)
