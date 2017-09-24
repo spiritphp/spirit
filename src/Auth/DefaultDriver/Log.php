@@ -7,7 +7,7 @@ use Spirit\DB;
 use Spirit\Request\Client;
 use Spirit\Common\Models\User\Log as LogModel;
 
-class Logs {
+class Log {
 
     /**
      * @param User $user

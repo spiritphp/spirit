@@ -4,6 +4,7 @@ namespace Spirit\Response;
 
 use Spirit\Config\Cfg;
 use Spirit\Engine;
+use Spirit\Request\Session;
 
 class FE
 {
@@ -285,5 +286,10 @@ class FE
         }
 
         return implode("\n\t", $html);
+    }
+
+    public static function inputToken()
+    {
+        return '<input type="hidden" name="_token" value="' . Session::token() . '" />';
     }
 }

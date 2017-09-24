@@ -4,6 +4,7 @@ namespace Spirit\Response;
 
 use Spirit\Engine;
 use Spirit\Event;
+use Spirit\Request\Session;
 use Spirit\Request\URL;
 
 class Redirect

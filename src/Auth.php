@@ -17,6 +17,7 @@ use Spirit\Common\Models\User;
  * @method static User user()
  * @method static void loginById($id, $remember = false)
  * @method static User|null authorize($filters, $remember = false)
+ * @method static User|null register($fields, $autoAuthorize = true, $remember = false)
  * @method static void logout()
  * @method static void setUserCookie($user, $version = null)
  *

@@ -152,3 +152,10 @@ if (!function_exists('js')) {
         return \Spirit\Response\FE::js($v, $ver);
     }
 }
+
+if (!function_exists('inputToken')) {
+    function inputToken()
+    {
+        return \Spirit\Response\FE::inputToken();
+    }
+}
