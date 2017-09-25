@@ -224,7 +224,7 @@ class Engine
             }
 
             $this->constructor
-                ->setContent($response)
+                ->setContent((string)$response)
                 ->render();
         }
 

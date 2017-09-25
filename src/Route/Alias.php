@@ -61,6 +61,6 @@ trait Alias {
 
         $url = strtr($path, $replaceArr) . (count($vars) ? '?' . http_build_query($vars) : '');
 
-        return '/' . $url;
+        return '/' . rtrim($url,'/');
     }
 }

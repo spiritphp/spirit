@@ -159,7 +159,7 @@ abstract class Model implements ArrayAccess, Arrayable, JsonSerializable, Jsonab
      */
     public static function __callStatic($method, array $args = [])
     {
-        return static::make()->{$method}($args);
+        return static::make()->{$method}(...$args);
     }
 
     /**

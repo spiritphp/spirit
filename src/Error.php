@@ -85,7 +85,7 @@ class Error
         $e->complete();
     }
 
-    public static function make($statusCode, $message = null, $file = null, $line = null, $trace = null)
+    public static function make($statusCode, $message = null, $file = null, $line = null)
     {
         if (!$file) {
             $d = debug_backtrace();
@@ -97,7 +97,7 @@ class Error
             ->message($message)
             ->file($file)
             ->line($line)
-            ->trace($trace)
+            //->trace()
             ->complete();
     }
 
