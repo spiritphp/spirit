@@ -5,6 +5,13 @@ namespace Spirit\Request;
 use Spirit\Engine;
 use Spirit\Request;
 
+/**
+ * Class RequestProvider
+ * @package Spirit\Request
+ *
+ * @method array only(...$args)
+ * @method array all()
+ */
 class RequestProvider
 {
 

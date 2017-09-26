@@ -84,6 +84,11 @@ class Request {
         $this->requestProvider = $requestProvider;
     }
 
+    public function requestProvider()
+    {
+        return $this->requestProvider;
+    }
+
     public function __call($name, $arguments)
     {
         return $this->requestProvider->{$name}(...$arguments);
