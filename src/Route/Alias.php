@@ -1,6 +1,7 @@
 <?php
 
 namespace Spirit\Route;
+use Spirit\Engine;
 
 /**
  * Trait Alias
@@ -61,6 +62,6 @@ trait Alias {
 
         $url = strtr($path, $replaceArr) . (count($vars) ? '?' . http_build_query($vars) : '');
 
-        return '/' . rtrim($url,'/');
+        return Engine::i()->url . rtrim($url,'/');
     }
 }
