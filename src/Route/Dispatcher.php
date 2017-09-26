@@ -2,6 +2,8 @@
 namespace Spirit\Route;
 
 use Spirit\Error;
+use Spirit\Request;
+use Spirit\Request\RequestProvider;
 use Spirit\Structure\Model;
 use Spirit\Response;
 use Spirit\Structure\Arrayable;
@@ -85,33 +87,36 @@ class Dispatcher {
     {
         $prepareVars = [];
         $parameters = $reflection->getParameters();
-        foreach (array_values($vars) as $k => $v) {
-            if (isset($parameters[$k])) {
-                if($ref_class = $parameters[$k]->getClass()) {
-                    $v = $this->prepareVarClass($ref_class, $v);
 
-                    if (is_null($v)) {
+        foreach($parameters as $parameter) {
+            if($ref_class = $parameter->getClass()) {
+                if ($ref_class->name === RequestProvider::class) {
+                    $prepareVars[] = Request::getInstance()->requestProvider();
+                } else if ($ref_class->isSubclassOf(new \ReflectionClass(Model::class))) {
+                    if (count($vars) === 0) {
+                        break;
+                    }
+
+                    $method = $ref_class->getMethod('find');
+                    $newValue = $method->invoke(null, array_shift($vars));
+
+                    if (is_null($newValue)) {
                         return null;
                     }
-                }
-            }
 
-            $prepareVars[] = $v;
+                    $prepareVars[] = $newValue;
+                }
+
+            } else {
+                if (count($vars) === 0) {
+                    break;
+                }
+
+                $prepareVars[] = array_shift($vars);
+            }
         }
 
         return $prepareVars;
-    }
-
-    protected function prepareVarClass(\ReflectionClass $class, $v)
-    {
-        $cl = new \ReflectionClass(Model::class);
-
-        if ($class->isSubclassOf($cl)) {
-            $method = $class->getMethod('find');
-            $v = $method->invoke(null, $v);
-        }
-
-        return $v;
     }
 
     public  function logs()
