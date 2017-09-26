@@ -20,6 +20,11 @@ class Recovery implements RecoveryInterface {
         return new static($user);
     }
 
+    public static function make()
+    {
+        return new static();
+    }
+
     /**
      * @var User
      */
@@ -34,7 +39,7 @@ class Recovery implements RecoveryInterface {
      * Recovery constructor.
      * @param User $user
      */
-    public function __construct($user)
+    public function __construct($user = null)
     {
         $this->user = $user;
     }
@@ -89,6 +94,7 @@ class Recovery implements RecoveryInterface {
         }
 
         $this->recovery = $recovery;
+        $this->user = $recovery->user;
 
         return $this;
     }

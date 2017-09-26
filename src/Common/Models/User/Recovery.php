@@ -2,6 +2,7 @@
 
 namespace Spirit\Common\Models\User;
 
+use Spirit\Common\Models\User;
 use Spirit\Engine;
 use Spirit\Structure\Model;
 
@@ -15,6 +16,8 @@ use Spirit\Structure\Model;
  * @property string $ip
  * @property string $ip_used
  * @property string $used_at
+ *
+ * @property User $user
  */
 class Recovery extends Model {
 
