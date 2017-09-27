@@ -24,6 +24,7 @@ use Spirit\Structure\Jsonable;
  * @author Marat Nuriev
  *
  * @property integer $id
+ * @property string $created_at
  *
  * @method static Builder|Model where(...$param)
  * @method static Builder|Model orWhere(...$param)

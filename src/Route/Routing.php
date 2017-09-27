@@ -250,6 +250,11 @@ class Routing
         return $this->middleware->check($routeConfig['middleware']);
     }
 
+    public function is($alias)
+    {
+        return $this->current && $this->current->alias === $alias;
+    }
+
     /**
      * @param $path
      * @param $routeConfig

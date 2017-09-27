@@ -13,6 +13,7 @@ use Spirit\Route\Routing;
  * @method static void add($path, $options)
  * @method static void post($path, $options)
  * @method static void get($path, $options)
+ * @method static boolean is($alias)
  * @method static void match($methods, $path, $options)
  * @method static void group($options, $callback)
  * @method static array getRoutes()

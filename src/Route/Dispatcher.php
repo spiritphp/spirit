@@ -1,14 +1,10 @@
 <?php
 namespace Spirit\Route;
 
-use Spirit\Error;
+
 use Spirit\Request;
-use Spirit\Request\RequestProvider;
 use Spirit\Structure\Model;
 use Spirit\Response;
-use Spirit\Structure\Arrayable;
-use Spirit\Structure\Jsonable;
-use Spirit\View;
 
 class Dispatcher {
 
@@ -90,8 +86,8 @@ class Dispatcher {
 
         foreach($parameters as $parameter) {
             if($ref_class = $parameter->getClass()) {
-                if ($ref_class->name === RequestProvider::class) {
-                    $prepareVars[] = Request::getInstance()->requestProvider();
+                if ($ref_class->name === Request::class) {
+                    $prepareVars[] = Request::getInstance();
                 } else if ($ref_class->isSubclassOf(new \ReflectionClass(Model::class))) {
                     if (count($vars) === 0) {
                         break;

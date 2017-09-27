@@ -17,12 +17,43 @@ class Recovery implements RecoveryInterface {
      */
     public static function user($user)
     {
-        return new static($user);
+        return static::make()->setUser($user);
     }
 
-    public static function make()
+    /**
+     * @param $token
+     * @param int $lifeminute
+     * @return null|static
+     */
+    public static function token($token, $lifeminute = 60)
     {
-        return new static();
+        /**
+         * @var User\Recovery $recovery
+         */
+        $recovery = User\Recovery::where('token',$token)->first();
+
+        if (!$recovery) {
+            return null;
+        }
+
+        if ($recovery->used_at) {
+            return null;
+        }
+
+        if ((time() - strtotime($recovery->created_at)) > $lifeminute * 60) {
+            return null;
+        }
+
+        return static::make($recovery);
+    }
+
+    /**
+     * @param User\Recovery $recovery
+     * @return static
+     */
+    public static function make($recovery = null)
+    {
+        return new static($recovery);
     }
 
     /**
@@ -37,15 +68,37 @@ class Recovery implements RecoveryInterface {
 
     /**
      * Recovery constructor.
-     * @param User $user
+     * @param User\Recovery $recovery
      */
-    public function __construct($user = null)
+    public function __construct($recovery = null)
     {
-        $this->user = $user;
+        $this->recovery = $recovery;
+
+        if ($this->recovery) {
+            $this->user = $this->recovery->user;
+        }
     }
 
-    public function init()
+    public function setUser(User $user)
     {
+        if ($this->user) {
+            throw new RecoveryException('The user is already specified');
+        }
+
+        $this->user = $user;
+        return $this;
+    }
+
+    protected function init()
+    {
+        if (!$this->user) {
+            throw new RecoveryException('The user is not specified');
+        }
+
+        if ($this->recovery) {
+            throw new RecoveryException('The recovery is already initialized');
+        }
+
         $token = Hash::h256([$this->user->id, uniqid()]);
 
         $recovery = new User\Recovery();
@@ -54,9 +107,7 @@ class Recovery implements RecoveryInterface {
 
         $this->user->recoveries()->save($recovery);
 
-        $this->recovery = $recovery;
-
-        return $this;
+        return $recovery;
     }
 
     /**
@@ -64,13 +115,17 @@ class Recovery implements RecoveryInterface {
      */
     public function get()
     {
+        if (!$this->recovery) {
+            $this->recovery = $this->init();
+        }
+
         return $this->recovery;
     }
 
     public function use()
     {
         if (!$this->recovery) {
-            throw new RecoveryException('Recovery is not init');
+            throw new RecoveryException('Recovery is not initialized');
         }
 
         $this->recovery->used_at = DB::raw('NOW()');
@@ -78,24 +133,4 @@ class Recovery implements RecoveryInterface {
         $this->recovery->save();
     }
 
-    public function initForToken($token)
-    {
-        /**
-         * @var User\Recovery $recovery
-         */
-        $recovery = User\Recovery::where('token',$token)->first();
-
-        if (!$recovery) {
-            return $this;
-        }
-
-        if ($recovery->used_at) {
-            return $this;
-        }
-
-        $this->recovery = $recovery;
-        $this->user = $recovery->user;
-
-        return $this;
-    }
 }

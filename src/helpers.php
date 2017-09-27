@@ -134,7 +134,20 @@ if (!function_exists('route')) {
      */
     function route($id, $vars = [])
     {
-        return \Spirit\Engine::route()->makeUrlForAlias($id, $vars);
+        return \Spirit\Route::makeUrlForAlias($id, $vars);
+    }
+
+}
+
+if (!function_exists('routeIs')) {
+
+    /**
+     * @param $alias
+     * @return string
+     */
+    function routeIs($alias)
+    {
+        return \Spirit\Route::is($alias);
     }
 
 }

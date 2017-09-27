@@ -10,9 +10,14 @@ interface RecoveryInterface {
      */
     public static function user($user);
 
+    /**
+     * @param $token
+     * @param int $lifeminute
+     * @return static
+     */
+    public static function token($token, $lifeminute = 60);
+
     public function get();
 
-    public function init();
-
-    public function initForToken($token);
+    public function use();
 }
