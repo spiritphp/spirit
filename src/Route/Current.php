@@ -48,11 +48,7 @@ class Current implements \ArrayAccess, Arrayable, Jsonable, \JsonSerializable {
 
     public function __get($k)
     {
-        if (!isset($this->data[$k])) {
-            throw new \Exception('CurrentRoute\'s property is not found');
-        }
-
-        return $this->data[$k];
+        return isset($this->data[$k]) ? $this->data[$k] : null;
     }
 
     public function offsetExists($offset)
