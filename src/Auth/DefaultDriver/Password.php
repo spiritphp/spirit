@@ -2,6 +2,8 @@
 
 namespace Spirit\Auth\DefaultDriver;
 
+use Spirit\Common\Models\User;
+
 class Password {
 
     public static function init($password)
@@ -14,4 +16,18 @@ class Password {
         return password_verify($password, $passwordHash);
     }
 
+    /**
+     * @param User $user
+     * @param $password
+     * @return string
+     */
+    public static function set($user, $password)
+    {
+        $version = uniqid();
+        $user->password = static::init($password);
+        $user->version = $version;
+        $user->save();
+
+        return $version;
+    }
 }

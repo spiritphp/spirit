@@ -160,16 +160,9 @@ class DefaultDriver extends Driver
 
     public function setPassword($password)
     {
-        $version = uniqid();
-        $this->user->password = Password::init($password);
-
-        if ($version) {
-            $this->user->version = $version;
-            $this->storage->version = $version;
-            $this->storage->save();
-        }
-
-        $this->user->save();
+        $version = Password::set($this->user, $password);
+        $this->storage->version = $version;
+        $this->storage->save();
     }
 
     /**
