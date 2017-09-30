@@ -78,16 +78,6 @@ abstract class Controller extends Basic implements \JsonSerializable
         return $this->response(parent::view($view, $data));
     }
 
-    protected function urlA($dir = false)
-    {
-        return Request\URL::make('undercover/' . $dir);
-    }
-
-    protected function redirectA($path = false, $params = false)
-    {
-        return Response\Redirect::to('undercover/' . $path, $params);
-    }
-
     protected function addCss($name)
     {
         FE::addCss($name);
