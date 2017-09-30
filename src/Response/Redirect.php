@@ -82,6 +82,13 @@ class Redirect
         exit();
     }
 
+    public function with($key, $value)
+    {
+        Session::once($key, $value);
+
+        return $this;
+    }
+
     protected function getPostForm($url, $params = [])
     {
         if (!is_array($params)) $params = [$params];
@@ -103,35 +110,33 @@ class Redirect
         return implode('', $html);
     }
 
-    public static function home($params = [])
+    public function home()
     {
-        return static::to('/', $params);
+        $this->redirect = '/';
+        return $this;
     }
 
-    public static function back($params = [])
+    public function back()
     {
-        return static::to(self::TYPE_BACK, $params);
+        $this->redirect = self::TYPE_BACK;
+        return $this;
     }
 
-    public static function reload($params = [])
+    public function reload()
     {
-        return static::to(self::TYPE_RELOAD, $params);
+        $this->redirect = self::TYPE_RELOAD;
+        return $this;
     }
 
     public static function to($to = false, $params = [])
     {
-        return new Redirect($to, $params);
+        return static::make($to, $params);
     }
 
-    public static function route($route_name, $params)
+    public function route($route_name, $params = [])
     {
-        return static::to(URL::route($route_name, $params));
-    }
-
-    public static function methodPost($to, $params = [])
-    {
-        return static::make($to, $params)
-            ->post();
+        $this->redirect = URL::route($route_name, $params);
+        return $this;
     }
 
     /**
