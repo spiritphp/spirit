@@ -75,7 +75,7 @@ class Session
     public function write()
     {
         $data = $this->box->toArray();
-        $data['_once'] = [];
+        unset($data['_clean']);
 
         $this->box = new Box($data);
 

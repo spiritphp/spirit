@@ -19,6 +19,9 @@ class Box extends \Spirit\Structure\Box {
         if (!isset($this->data['_once'])) {
             $this->data['_once'] = [];
         }
+
+        $this->data['_clean'] = $this->data['_once'];
+        $this->data['_once'] = [];
     }
 
     public function get($key, $default = null)
@@ -31,12 +34,12 @@ class Box extends \Spirit\Structure\Box {
             return $this->data[$key];
         }
 
-        return array_key_exists($key, $this->data['_once']) ? $this->data['_once'][$key] : $default;
+        return array_key_exists($key, $this->data['_clean']) ? $this->data['_clean'][$key] : $default;
     }
 
     public function all()
     {
-        return array_merge($this->data,$this->data['_once']);
+        return array_merge($this->data,$this->data['_clean']);
     }
 
     public function except()
@@ -44,7 +47,7 @@ class Box extends \Spirit\Structure\Box {
         $keys = Arr::fromArgs(func_get_args());
         $arr = parent::except($keys);
 
-        foreach($this->data['_once'] as $k => $v) {
+        foreach($this->data['_clean'] as $k => $v) {
             if (in_array($k, $keys, true)) {
                 continue;
             }
@@ -60,7 +63,7 @@ class Box extends \Spirit\Structure\Box {
         $keys = Arr::fromArgs(func_get_args());
 
         foreach ($keys as $key) {
-            if (!Arr::exists($this->data, $key) && !Arr::exists($this->data['_once'], $key)) {
+            if (!Arr::exists($this->data, $key) && !Arr::exists($this->data['_clean'], $key)) {
                 return false;
             }
         }
@@ -74,20 +77,24 @@ class Box extends \Spirit\Structure\Box {
 
         parent::forget($keys);
 
-        foreach($this->data['_once'] as $k => $v) {
+        foreach($this->data['_clean'] as $k => $v) {
             if (in_array($k, $keys, true)) {
                 unset($this->data[$k]);
             }
         }
     }
 
-    public function once($k, $v)
+    public function once($k, $v = null)
     {
         if ($this->isLock === true) {
             throw new \Exception('Lock box');
         }
 
-        $this->data['_once'][$k] = $v;
+        if (is_array($k)) {
+            $this->data['_once'] = array_merge($this->data['_once'], $k);
+        } else {
+            $this->data['_once'][$k] = $v;
+        }
     }
 
     public function storage($k, $storageClass = null)
