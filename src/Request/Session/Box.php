@@ -5,7 +5,8 @@ namespace Spirit\Request\Session;
 use Spirit\Func\Arr;
 use Spirit\Func\Hash;
 
-class Box extends \Spirit\Structure\Box {
+class Box extends \Spirit\Structure\Box
+{
 
     /**
      * @var array|Storage[]
@@ -22,6 +23,17 @@ class Box extends \Spirit\Structure\Box {
 
         $this->data['_clean'] = $this->data['_once'];
         $this->data['_once'] = [];
+
+        $this->initToken();
+    }
+
+    protected function initToken()
+    {
+        if ($this->get('_token')) {
+            return;
+        }
+
+        $this->set('_token', Hash::h(uniqid(rand(), true)));
     }
 
     public function get($key, $default = null)
@@ -39,7 +51,7 @@ class Box extends \Spirit\Structure\Box {
 
     public function all()
     {
-        return array_merge($this->data,$this->data['_clean']);
+        return array_merge($this->data, $this->data['_clean']);
     }
 
     public function except()
@@ -62,7 +74,7 @@ class Box extends \Spirit\Structure\Box {
     {
         $keys = Arr::fromArgs(func_get_args());
 
-        foreach ($keys as $key) {
+        foreach($keys as $key) {
             if (!Arr::exists($this->data, $key) && !Arr::exists($this->data['_clean'], $key)) {
                 return false;
             }
@@ -120,14 +132,6 @@ class Box extends \Spirit\Structure\Box {
 
     public function token()
     {
-       if ($token = $this->get('_token')) {
-            return $token;
-        }
-
-        $token = Hash::h(uniqid(rand(), true));
-
-       $this->set('_token', $token);
-
-       return $token;
+        return $this->get('_token');
     }
 }
