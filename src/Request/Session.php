@@ -77,8 +77,6 @@ class Session
         $data = $this->box->toArray();
         unset($data['_clean']);
 
-        $this->box = new Box($data);
-
         if (!$this->isSimpleArray) {
             $_SESSION = $data;
         }

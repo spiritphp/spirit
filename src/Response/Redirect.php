@@ -4,6 +4,7 @@ namespace Spirit\Response;
 
 use Spirit\Engine;
 use Spirit\Event;
+use Spirit\Request;
 use Spirit\Request\Session;
 use Spirit\Request\URL;
 
@@ -85,6 +86,13 @@ class Redirect
     public function with($key, $value)
     {
         Session::once($key, $value);
+
+        return $this;
+    }
+
+    public function withInputs($inputs = null)
+    {
+        Session::once('_inputs', $inputs ?: Request::all());
 
         return $this;
     }

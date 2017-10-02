@@ -51,7 +51,11 @@ class Box extends \Spirit\Structure\Box
 
     public function all()
     {
-        return array_merge($this->data, $this->data['_clean']);
+        $arr = array_merge($this->data, $this->data['_clean']);
+
+        unset($arr['_clean']);
+
+        return $arr;
     }
 
     public function except()

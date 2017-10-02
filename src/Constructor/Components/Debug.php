@@ -29,7 +29,7 @@ class Debug extends Component
 
         $data['get'] = $_GET;
         $data['post'] = $_POST;
-        $data['session'] = $_SESSION;
+        $data['session'] = Request\Session::all();
         $data['cookie'] = $_COOKIE;
         $data['files'] = $_FILES;
 

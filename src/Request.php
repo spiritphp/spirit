@@ -26,6 +26,7 @@ use Spirit\Request\Variables;
  * @method static null|UploadedFile|FileVariables file($key = null, $default = null)
  * @method static bool has(...$keys)
  * @method static array only(...$keys)
+ * @method static mixed old($key)
  * @method static array except(...$keys)
  * @method static void forget(...$keys)
  * @method static bool token()

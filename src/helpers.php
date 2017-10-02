@@ -172,3 +172,10 @@ if (!function_exists('inputToken')) {
         return \Spirit\Response\FE::inputToken();
     }
 }
+
+if (!function_exists('old')) {
+    function old($key)
+    {
+        return \Spirit\Request::old($key);
+    }
+}

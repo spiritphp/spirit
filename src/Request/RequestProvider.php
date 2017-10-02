@@ -260,6 +260,17 @@ class RequestProvider
         return;
     }
 
+    public function old($key)
+    {
+        $inputs = Session::get('_inputs');
+
+        if (!$inputs || !is_array($inputs)) {
+            return null;
+        }
+
+        return isset($inputs[$key]) ? $inputs[$key] : null;
+    }
+
     public function token()
     {
         if ($token = $this->get('_token')) {
