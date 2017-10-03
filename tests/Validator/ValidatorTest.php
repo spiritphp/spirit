@@ -20,9 +20,9 @@ final class ValidatorTest extends TestCase
         ]);
 
         $this->assertFalse($v->check());
-        $this->assertArrayHasKey('email', $v->getAllError());
-        $this->assertArrayNotHasKey('is_num', $v->getAllError());
-        $this->assertInternalType('string', $v->getFirstErrorForAttr('email'));
+        $this->assertArrayHasKey('email', $v->errors());
+        $this->assertArrayNotHasKey('is_num', $v->errors());
+        $this->assertInternalType('string', $v->errors()->first('email'));
 
         $v = Validator::make([
             'email' => 'asd@asd.ru'

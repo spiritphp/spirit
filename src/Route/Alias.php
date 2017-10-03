@@ -62,6 +62,7 @@ trait Alias {
 
         $url = strtr($path, $replaceArr) . (count($vars) ? '?' . http_build_query($vars) : '');
 
-        return Engine::i()->url . rtrim($url,'/');
+        //return Engine::i()->url . rtrim($url,'/');
+        return '/' . ltrim(rtrim($url,'/'),'/');
     }
 }

@@ -7,6 +7,8 @@ use Spirit\Event;
 use Spirit\Request;
 use Spirit\Request\Session;
 use Spirit\Request\URL;
+use Spirit\Services\Validator\ErrorMessages;
+use Spirit\Structure\Arrayable;
 
 class Redirect
 {
@@ -14,17 +16,17 @@ class Redirect
     const TYPE_BACK = 'back';
     const TYPE_RELOAD = 'reload';
 
-    protected $redirect;
+    protected $redirect = null;
     protected $isPost = false;
     protected $params = [];
 
-    public function __construct($redirect, $params = [])
+    public function __construct($redirect = null, $params = [])
     {
         $this->redirect = $redirect;
         $this->params = $params;
     }
 
-    public static function make($redirect, $params = [])
+    public static function make($redirect = null, $params = [])
     {
         return new static($redirect, $params);
     }
@@ -97,6 +99,17 @@ class Redirect
         return $this;
     }
 
+    public function withErrors($errors)
+    {
+        if ($errors instanceof Arrayable) {
+            $errors = $errors->toArray();
+        }
+
+        Session::once('_errors', $errors);
+
+        return $this;
+    }
+
     protected function getPostForm($url, $params = [])
     {
         if (!is_array($params)) $params = [$params];
@@ -136,7 +149,7 @@ class Redirect
         return $this;
     }
 
-    public static function to($to = false, $params = [])
+    public static function to($to = null, $params = [])
     {
         return static::make($to, $params);
     }

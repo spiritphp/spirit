@@ -4,6 +4,7 @@ namespace Spirit\Request;
 
 use Spirit\Engine;
 use Spirit\Request;
+use Spirit\Services\Validator\ErrorMessages;
 
 /**
  * Class RequestProvider
@@ -269,6 +270,20 @@ class RequestProvider
         }
 
         return isset($inputs[$key]) ? $inputs[$key] : null;
+    }
+
+    /**
+     * @return ErrorMessages
+     */
+    public function errors()
+    {
+        $errors = Session::get('_errors');
+
+        if (!$errors || !is_array($errors)) {
+            $errors = [];
+        }
+
+        return new ErrorMessages($errors);
     }
 
     public function token()

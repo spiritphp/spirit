@@ -2,6 +2,8 @@
 
 namespace Spirit\Services;
 
+use Spirit\Response\Redirect;
+use Spirit\Services\Validator\ErrorMessages;
 use Spirit\Services\Validator\Rule;
 
 /**
@@ -51,16 +53,6 @@ class Validator
         return $v->data($data)
             ->rules($rules)
             ->titles($titles);
-    }
-
-    /**
-     * @param $data
-     * @param $rules
-     * @return bool
-     */
-    public static function validate($data, $rules)
-    {
-        return static::make($data,$rules)->check();
     }
 
     /**
@@ -122,7 +114,7 @@ class Validator
         $this->validation();
 
         $error = false;
-        foreach ($this->items as $item) {
+        foreach($this->items as $item) {
             if ($item[static::ERROR]) {
                 $error = true;
                 break;
@@ -136,7 +128,7 @@ class Validator
     {
         $items = &$this->items;
 
-        foreach ($this->rules as $k => $rule) {
+        foreach($this->rules as $k => $rule) {
             $value = isset($this->data[$k]) ? $this->data[$k] : null;
             $title = isset($this->titles[$k]) ? $this->titles[$k] : null;
 
@@ -151,7 +143,7 @@ class Validator
             ];
         }
 
-        foreach ($this->data as $k => $value) {
+        foreach($this->data as $k => $value) {
             if (!isset($items[$k])) {
                 $items[$k] = [
                     static::VALUE => $value,
@@ -171,7 +163,7 @@ class Validator
 
         $this->prepare();
 
-        foreach ($this->items as $attr => &$item) {
+        foreach($this->items as $attr => &$item) {
             if (!$item[static::RULES]) {
                 $item[static::ERROR] = false;
                 $item[static::SUCCESS] = true;
@@ -212,7 +204,7 @@ class Validator
         }
 
         $errors = [];
-        foreach ($rules as $rule) {
+        foreach($rules as $rule) {
 
             if ($this->rule->checkRule($rule, $value, $attr, $title)) {
 
@@ -253,7 +245,7 @@ class Validator
         $this->validation();
 
         $error = false;
-        foreach ($this->items as $item) {
+        foreach($this->items as $item) {
             if ($item[static::ERROR]) {
                 $error = true;
                 break;
@@ -266,49 +258,32 @@ class Validator
     public function customError($key, $error, $rule = false)
     {
         $this->rule->customError($key, $error, $rule);
-
     }
 
-    public function getFirstErrorForAttr($attr)
-    {
-        $this->validation();
-
-        if (!isset($this->items[$attr]))
-            return null;
-
-        if ($this->items[$attr][static::SUCCESS])
-            return false;
-
-        return $this->items[$attr][static::ERROR][0];
-    }
-
-    public function getErrorForAttr($attr)
-    {
-        $this->validation();
-
-        if (!isset($this->items[$attr]))
-            return null;
-
-        if ($this->items[$attr][static::SUCCESS])
-            return false;
-
-        return $this->items[$attr][static::ERROR][0];
-    }
-
-    public function getAllError()
+    public function errors()
     {
         $this->validation();
 
         $error = [];
-        foreach ($this->items as $attr => $item) {
+        foreach($this->items as $attr => $item) {
             if ($item[static::ERROR]) {
-                $error[$attr] = $item[static::ERROR][0];
+                $error[$attr] = $item[static::ERROR];
             }
         }
 
-        if (count($error) == 0)
-            return false;
+        return new ErrorMessages($error);
+    }
 
-        return $error;
+    public function validate()
+    {
+        if ($this->check()) {
+            return;
+        }
+
+        Redirect::make()
+            ->back()
+            ->withInputs()
+            ->withErrors($this->errors())
+            ->send();
     }
 }

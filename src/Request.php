@@ -8,6 +8,7 @@ use Spirit\Request\HeaderVariables;
 use Spirit\Request\RequestProvider;
 use Spirit\Request\UploadedFile;
 use Spirit\Request\Variables;
+use Spirit\Services\Validator\ErrorMessages;
 
 /**
  * Class Request
@@ -27,6 +28,7 @@ use Spirit\Request\Variables;
  * @method static bool has(...$keys)
  * @method static array only(...$keys)
  * @method static mixed old($key)
+ * @method static ErrorMessages errors()
  * @method static array except(...$keys)
  * @method static void forget(...$keys)
  * @method static bool token()
