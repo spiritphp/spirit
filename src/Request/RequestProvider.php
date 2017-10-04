@@ -4,6 +4,7 @@ namespace Spirit\Request;
 
 use Spirit\Engine;
 use Spirit\Request;
+use Spirit\Services\Validator;
 use Spirit\Services\Validator\ErrorMessages;
 
 /**
@@ -284,6 +285,11 @@ class RequestProvider
         }
 
         return new ErrorMessages($errors);
+    }
+
+    public function validate($rules, $titles = null, $customErrors = null)
+    {
+        Validator::make($this->all(), $rules, $titles)->validate($customErrors);
     }
 
     public function token()

@@ -28,6 +28,7 @@ use Spirit\Services\Validator\ErrorMessages;
  * @method static bool has(...$keys)
  * @method static array only(...$keys)
  * @method static mixed old($key)
+ * @method static void validate($rules, $titles = null, $customErrors = null)
  * @method static ErrorMessages errors()
  * @method static array except(...$keys)
  * @method static void forget(...$keys)

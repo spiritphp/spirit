@@ -274,7 +274,7 @@ class Validator
         return new ErrorMessages($error);
     }
 
-    public function validate()
+    public function validate($customErrors = null)
     {
         if ($this->check()) {
             return;
@@ -283,7 +283,7 @@ class Validator
         Redirect::make()
             ->back()
             ->withInputs()
-            ->withErrors($this->errors())
+            ->withErrors($customErrors ? $customErrors : $this->errors())
             ->send();
     }
 }
