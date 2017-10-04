@@ -17,6 +17,8 @@ class Routing
 
     protected $routes = [];
 
+    protected $pathToRoutes = [];
+
 
     /**
      * @var Current
@@ -103,13 +105,19 @@ class Routing
             }
         }
 
-        $this->routes[$path] = [
-            //'path' => $path,
+        $this->routes[] = [
+            'path' => $path,
             'alias' => $id,
             'methods' => $methods,
             'uses' => $uses,
             'middleware' => $current_middleware,
         ];
+
+        if (!isset($this->pathToRoutes[$path])) {
+            $this->pathToRoutes[$path] = [];
+        }
+
+        $this->pathToRoutes[$path][] = count($this->routes) - 1;
 
         if ($id) {
             $this->alias[$id] = $path;
@@ -189,16 +197,18 @@ class Routing
         }
 
         $route = null;
-        if (isset($this->routes[$path])) {
-            $cfg = $this->routes[$path];
-            $cfg['path'] = $path;
-            $route = $this->matchRoute($path, $cfg);
-        } elseif (!$route) {
-            foreach($this->routes as $routeId => $routeConfig) {
-                $routeConfig['path'] = $routeId;
-                if ($route = $this->matchRoute($path, $routeConfig)) {
-                    break;
-                }
+        if (isset($this->pathToRoutes[$path])) {
+            $routes = [];
+            foreach($this->pathToRoutes[$path] as $idx) {
+                $routes[] = $this->routes[$idx];
+            }
+        } else {
+            $routes = $this->routes;
+        }
+
+        foreach($routes as $routeConfig) {
+            if ($route = $this->matchRoute($path, $routeConfig)) {
+                break;
             }
         }
 
@@ -295,7 +305,8 @@ class Routing
         }
 
         if (!$methodExist) {
-            throw new \Exception('Method is not found');
+            //throw new \Exception('Method is not allowed');
+            return null;
         }
 
         if ($this->checkMiddleware($routeConfig) !== true) {
