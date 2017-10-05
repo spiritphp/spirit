@@ -6,7 +6,6 @@ use Spirit\DB;
 use Spirit\Func\Str;
 use Spirit\FileSystem\File;
 use Spirit\Structure\Model;
-use Spirit\Response\Captcha;
 use Spirit\Services\Validator;
 
 class Rule
@@ -37,50 +36,6 @@ class Rule
      * @var Validator
      */
     protected $validator;
-
-    protected $validatorMessageError = [
-        self::TYPE_EXISTS => 'Неверное значение в поле <b>{{ATTR}}</b>',
-        self::TYPE_UNIQUE => 'Значение в поле <b>{{ATTR}}</b> должно быть уникальным',
-        self::TYPE_EMAIL => 'Значение в поле <b>{{ATTR}}</b> не проходит проверку на электронный адрес',
-        self::TYPE_REQUIRED => 'Поле <b>{{ATTR}}</b> обязательно к заполнению',
-        self::TYPE_REQUIRED_IF => [
-            'exist' => 'Поле <b>{{ATTR}}</b> обязательно к заполнению, если заполнено поле <b>{{ATTR_IF}}</b>',
-            'value' => 'Поле <b>{{ATTR}}</b> обязательно к заполнению, если поле <b>{{ATTR_IF}}</b> имеет значение <b>{{VALUE}}</b>',
-        ],
-        self::TYPE_SAME => 'Значения в поле <b>{{ATTR}}</b> и в поле  <b>{{ATTR_SAME}}</b> должны совпадать',
-        self::TYPE_URL => 'Неверное значение в поле <b>{{ATTR}}</b>',
-        self::TYPE_DATE => 'Неправильная дата в поле <b>{{ATTR}}</b>',
-        self::TYPE_DATE_FORMAT => 'Дата в поле <b>{{ATTR}}</b> не соответствует формату',
-        self::TYPE_BOOLEAN => 'Неверное значение в поле <b>{{ATTR}}</b>',
-        self::TYPE_AFTER => 'Дата в поле <b>{{ATTR}}</b> должна быть больше {{AFTER}}',
-        self::TYPE_BEFORE => 'Дата в поле <b>{{ATTR}}</b> должна быть меньше {{BEFORE}}',
-        self::TYPE_IMAGE => 'Загруженный файл <b>{{ATTR}}</b> не является изображением',
-        self::TYPE_BETWEEN => [
-            'string' => 'Значение в поле <b>{{ATTR}}</b> должно быть от {{MIN}} до {{MAX}} символов',
-            'numeric' => 'Значение в поле <b>{{ATTR}}</b> должно быть от {{MIN}} до {{MAX}}',
-            'array' => 'Количество значений в поле <b>{{ATTR}}</b> должно быть от {{MIN}} до {{MAX}}',
-            'file' => 'Загруженный файл <b>{{ATTR}}</b> должен быть размером от {{MIN}} до {{MAX}} байт',
-        ],
-        self::TYPE_INTEGER => 'Значение в поле <b>{{ATTR}}</b> должно быть числом',
-        self::TYPE_STRING => 'Значение в поле <b>{{ATTR}}</b> должно быть строкой',
-        self::TYPE_NUMERIC => 'Значение в поле <b>{{ATTR}}</b> должно быть числом',
-        self::TYPE_CONFIRMED => 'Значения в поле <b>{{ATTR}}</b> и в поле  <b>{{ATTR_SAME}}</b> должны совпадать',
-        self::TYPE_REGEX => 'Неверное значение в поле <b>{{ATTR}}</b>',
-        self::TYPE_MIN => [
-            'string' => 'Значение в поле <b>{{ATTR}}</b> должно быть больше {{MIN}} символов',
-            'numeric' => 'Значение в поле <b>{{ATTR}}</b> должно быть больше {{MIN}}',
-            'array' => 'Количество значений в поле <b>{{ATTR}}</b> должно быть больше {{MIN}}',
-            'file' => 'Загруженный файл <b>{{ATTR}}</b> должен быть размером больше {{MIN}} байт',
-        ],
-        self::TYPE_MAX => [
-            'string' => 'Значение в поле <b>{{ATTR}}</b> должно быть меньше {{MAX}} символов',
-            'numeric' => 'Значение в поле <b>{{ATTR}}</b> должно быть меньше {{MAX}}',
-            'array' => 'Количество значений в поле <b>{{ATTR}}</b> должно быть меньше {{MAX}}',
-            'file' => 'Загруженный файл <b>{{ATTR}}</b> должен быть размером меньше {{MIN}} байт',
-        ],
-        'customs' => []
-    ];
-
     protected $isBreak = false;
     protected $errorType;
     protected $errorVars = [];
@@ -180,33 +135,33 @@ class Rule
         $isErrorType = $this->getErrorType();
 
         $errorVar = array_merge([
-            '{{ATTR}}' => ($title ? $title : $attr)
+            ':attr' => ($title ? $title : $attr)
         ], $this->getErrorVars());
+//
+//        $e = false;
+//        if (isset($this->validatorMessageError['customs'][$attr][$rule])) {
+//            $e = $this->validatorMessageError['customs'][$attr][$rule];
+//
+//        } elseif (isset($this->validatorMessageError['customs'][$attr])) {
+//            $e = $this->validatorMessageError['customs'][$attr];
+//
+//        } elseif (isset($this->validatorMessageError['customs'][$rule])) {
+//            $e = $this->validatorMessageError['customs'][$rule];
+//        }
+//
+//        if ($isErrorType && !isset($e[$isErrorType])) {
+//            $e = false;
+//        } elseif (!$isErrorType && !is_string($e)) {
+//            $e = false;
+//        }
 
-        $e = false;
-        if (isset($this->validatorMessageError['customs'][$attr][$rule])) {
-            $e = $this->validatorMessageError['customs'][$attr][$rule];
+//        if (!$e) {
+//            //$e = $this->validatorMessageError[$rule];
+//        }
 
-        } elseif (isset($this->validatorMessageError['customs'][$attr])) {
-            $e = $this->validatorMessageError['customs'][$attr];
+        $key = 'validator.' . $rule . ($isErrorType ? '.' . $isErrorType : '');
 
-        } elseif (isset($this->validatorMessageError['customs'][$rule])) {
-            $e = $this->validatorMessageError['customs'][$rule];
-        }
-
-        if ($isErrorType && !isset($e[$isErrorType])) {
-            $e = false;
-        } elseif (!$isErrorType && !is_string($e)) {
-            $e = false;
-        }
-
-        if (!$e) {
-            $e = $this->validatorMessageError[$rule];
-        }
-
-        $error = $isErrorType && isset($e[$isErrorType]) ? $e[$isErrorType] : $e;
-
-        return strtr($error, $errorVar);
+        return lang($key, $errorVar);
     }
 
     protected function setBreak($v = true)
@@ -242,11 +197,11 @@ class Rule
 
         $this->setErrorType('exist');
 
-        $this->addErrorVarTitle('{{ATTR_IF}}', $item, $key);
+        $this->addErrorVarTitle(':attr_if', $item, $key);
 
         if (isset($options[1])) {
             $this->setErrorType('value');
-            $this->addErrorVar('{{VALUE}}', $item[Validator::VALUE]);
+            $this->addErrorVar(':value', $item[Validator::VALUE]);
         }
 
         return false;
@@ -273,7 +228,7 @@ class Rule
         $item = $this->validator->getItem($key);
         $same_value = $item ? $item[Validator::VALUE] : null;
 
-        $this->addErrorVarTitle('{{ATTR_SAME}}', $item, $key);
+        $this->addErrorVarTitle(':attr_same', $item, $key);
 
         return $same_value === $value;
     }
@@ -310,7 +265,7 @@ class Rule
 
     protected function checkDateFormat($value, $options)
     {
-        $this->addErrorVar('{{FORMAT}}', $options[0]);
+        $this->addErrorVar(':format', $options[0]);
 
         return $this->checkDate($value) && date_create_from_format($options[0], $value);
     }
@@ -358,7 +313,7 @@ class Rule
     protected function checkMax($value, $options)
     {
         $this->setErrorType($this->getType($value));
-        $this->addErrorVar('{{MAX}}', $options[0]);
+        $this->addErrorVar(':max', $options[0]);
 
         return $this->getTypeSize($value) <= $options[0];
     }
@@ -366,7 +321,7 @@ class Rule
     protected function checkMin($value, $options)
     {
         $this->setErrorType($this->getType($value));
-        $this->addErrorVar('{{MIN}}', $options[0]);
+        $this->addErrorVar(':min', $options[0]);
 
         return $this->getTypeSize($value) >= $options[0];
     }
@@ -374,8 +329,8 @@ class Rule
     protected function checkBetween($value, $options)
     {
         $this->setErrorType($this->getType($value));
-        $this->addErrorVar('{{MIN}}', $options[0]);
-        $this->addErrorVar('{{MAX}}', $options[1]);
+        $this->addErrorVar(':min', $options[0]);
+        $this->addErrorVar(':max', $options[1]);
 
         $size = $this->getTypeSize($value);
 
@@ -389,13 +344,13 @@ class Rule
 
     protected function checkAfter($value, $options)
     {
-        $this->addErrorVar('{{AFTER}}', $options[0]);
+        $this->addErrorVar(':after', $options[0]);
         return strtotime($value) >= strtotime($options[0]);
     }
 
     protected function checkBefore($value, $options)
     {
-        $this->addErrorVar('{{BEFORE}}', $options[0]);
+        $this->addErrorVar(':before', $options[0]);
         return strtotime($value) <= strtotime($options[0]);
     }
 

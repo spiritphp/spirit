@@ -179,3 +179,10 @@ if (!function_exists('old')) {
         return \Spirit\Request::old($key);
     }
 }
+
+if (!function_exists('lang')) {
+    function lang($key, $data = null)
+    {
+        return \Spirit\Lang::get($key, $data);
+    }
+}

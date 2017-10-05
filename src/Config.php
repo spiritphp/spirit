@@ -7,12 +7,12 @@ use Spirit\Common\Models\User;
 use Spirit\Request\Session\FileHandler;
 use Spirit\Structure\Package;
 use Spirit\Structure\Plugin;
-use Spirit\Structure\Provider;
 
 class Config
 {
     public $allconfig = [];
     public $timezone = 'Europe/Moscow';
+    public $lang = 'en';
 
     /**
      * Экшн который вызывается при ошибках

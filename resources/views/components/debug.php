@@ -161,7 +161,8 @@ $abs_path = \Spirit\Engine::i()->abs_path;
                         <?= $k; ?>
                     </div>
                     <div class="debug__content__block__body">
-                        <pre class="debug__content__block__pre"><?= json_encode($$v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); ?></pre>
+                        <pre class="debug__content__block__pre"><?= htmlspecialchars(json_encode($$v, JSON_PRETTY_PRINT |
+                                JSON_UNESCAPED_UNICODE)); ?></pre>
                     </div>
                 </div>
             <? endforeach; ?>
