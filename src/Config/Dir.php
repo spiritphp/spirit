@@ -26,6 +26,8 @@ use Spirit\Engine;
  * @property string $spirit_views
  * @property string $storage
  * @property string $logs
+ * @property string $resources
+ * @property string $lang
  * @property string $error
  * @property string $cache
  * @property string $sessions
@@ -79,6 +81,8 @@ class Dir {
         $this->logs = $this->storage . 'logs/';
         $this->error = $this->logs . 'error/';
         $this->cache = $this->storage . 'cache/';
+        $this->resources = $this->abs_path . 'resources/';
+        $this->lang = $this->resources . 'lang/';
 
         $this->public = $this->abs_path . 'public/';
         $this->images = $this->public . 'images/';
