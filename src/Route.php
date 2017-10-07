@@ -17,7 +17,7 @@ use Spirit\Route\Routing;
  * @method static void match($methods, $path, $options)
  * @method static void group($options, $callback)
  * @method static array getRoutes()
- * @method static string makeUrlForAlias($id, $vars = [])
+ * @method static string makeUrlForAlias($id, $vars = [], $withHost = false)
  * @method static Current parse($path)
  * @method static void addMiddleware($key, $middlewareClassName)
  */

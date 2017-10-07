@@ -1,6 +1,7 @@
 <?php
 
 namespace Spirit\Route;
+
 use Spirit\Engine;
 
 /**
@@ -8,17 +9,19 @@ use Spirit\Engine;
  * @package Spirit\Route
  * @mixin Routing
  */
-trait Alias {
+trait Alias
+{
 
     protected $alias = [];
 
     /**
      * @param $id
      * @param array $vars
+     * @param bool $withHost
      * @return string
      * @throws \Exception
      */
-    public function makeUrlForAlias($id, $vars = [])
+    public function makeUrlForAlias($id, $vars = [], $withHost = false)
     {
         if (!isset($this->alias[$id])) {
             throw new \Exception('Not found route for alias ' . $id);
@@ -62,7 +65,6 @@ trait Alias {
 
         $url = strtr($path, $replaceArr) . (count($vars) ? '?' . http_build_query($vars) : '');
 
-        //return Engine::i()->url . rtrim($url,'/');
-        return '/' . ltrim(rtrim($url,'/'),'/');
+        return ($withHost ? Engine::i()->url : '/') . ltrim(rtrim($url, '/'), '/');
     }
 }

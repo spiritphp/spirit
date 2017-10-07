@@ -130,11 +130,12 @@ if (!function_exists('route')) {
     /**
      * @param $id
      * @param array $vars
+     * @param bool $withHost
      * @return string
      */
-    function route($id, $vars = [])
+    function route($id, $vars = [], $withHost = false)
     {
-        return \Spirit\Route::makeUrlForAlias($id, $vars);
+        return \Spirit\Route::makeUrlForAlias($id, $vars, $withHost);
     }
 
 }
