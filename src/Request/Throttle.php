@@ -58,13 +58,13 @@ class Throttle
         $cache['c'] += 1;
         $this->cacheData = $cache;
 
-        $this->write(60);
+        $this->write(1);
     }
 
     protected function stop()
     {
         $cache = $this->cache();
-        $cache['stop'] = time() + $this->timeout;
+        $cache['stop'] = time() + $this->timeout * 60;
 
         $this->cacheData = $cache;
 
