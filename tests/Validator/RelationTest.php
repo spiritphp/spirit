@@ -1,15 +1,16 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Validator;
+
+use PHPUnit\Framework\TestCase;
 use Spirit\Services\Validator;
-use Spirit\Response\Captcha;
 use Spirit\DB;
 use Spirit\DB as db_n;
 
 /**
  * @covers DB
  */
-final class ValidatorRelationTest extends TestCase
+class RelationTest extends TestCase
 {
 
     public function testCheckImage()

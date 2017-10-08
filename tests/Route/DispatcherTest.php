@@ -1,29 +1,13 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
-use Spirit\Structure\Model;
+namespace Tests\Route;
+
+use PHPUnit\Framework\TestCase;
+use Spirit\Response;
 use Spirit\Route;
 use Spirit\View;
 use Spirit\DB;
 use Spirit\DB as db_n;
-
-class TestRouteDispatcherUserModel extends Model
-{
-    use \Spirit\Structure\Model\SoftRemoveTrait;
-    protected $table = 'test_route_dispatcher_model__users';
-    protected $timestamps = true;
-
-}
-
-class TestRouteController extends \Spirit\Structure\Controller
-{
-
-    public function test(TestRouteDispatcherUserModel $userModel)
-    {
-        return $userModel->name;
-    }
-
-}
 
 /**
  * @covers DB
@@ -53,8 +37,8 @@ final class RouteDispatcherTest extends TestCase
 
         static::$routing = Route::make();
 
-        static::$routing->add('controller/{user}/name', '\TestRouteController@test');
-        static::$routing->add('callable/{user}/email', function(TestRouteDispatcherUserModel $userModel){
+        static::$routing->add('controller/{user}/name', RouteController::class . '@test');
+        static::$routing->add('callable/{user}/email', function(DispatcherUserModel $userModel){
             return $userModel->email;
         });
         static::$routing->add('callable/array', function(){
@@ -76,7 +60,7 @@ final class RouteDispatcherTest extends TestCase
 
     public function testController()
     {
-        $user = new TestRouteDispatcherUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
+        $user = new DispatcherUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
         $user->save();
 
         $result = static::$routing->parse('controller/25/name');
@@ -91,13 +75,13 @@ final class RouteDispatcherTest extends TestCase
         $response = Route\Dispatcher::make($result)->response();
 
         $this->assertNotNull($response);
-        $this->assertTrue($response instanceof Spirit\Response);
+        $this->assertTrue($response instanceof Response);
         $this->assertEquals('Marat Nuriev',$response);
     }
 
     public function testCallback()
     {
-        $user = new TestRouteDispatcherUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
+        $user = new DispatcherUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
         $user->save();
 
         $result = static::$routing->parse('callable/25/email');
@@ -129,7 +113,7 @@ final class RouteDispatcherTest extends TestCase
         $this->assertNotNull($result);
 
         $response = Route\Dispatcher::make($result)->response();
-        $this->assertTrue($response instanceof Spirit\Response);
+        $this->assertTrue($response instanceof Response);
         $this->assertEquals('<div>is_view</div>', $response->toString());
     }
 }

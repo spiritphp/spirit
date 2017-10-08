@@ -1,12 +1,14 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Validator;
+
+use PHPUnit\Framework\TestCase;
 use \Spirit\Services\Validator;
 
 /**
  * @covers DB
  */
-final class ValidatorTest extends TestCase
+class ValidatorTest extends TestCase
 {
 
     public function testBase()

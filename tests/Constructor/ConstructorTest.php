@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\Constructor;
+
 use PHPUnit\Framework\TestCase;
 use Spirit\Constructor;
 

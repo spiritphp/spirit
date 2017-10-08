@@ -1,47 +1,10 @@
 <?php
+
+namespace Tests\Model;
+
 use PHPUnit\Framework\TestCase;
-use Spirit\Structure\Model;
 use Spirit\DB;
 use Spirit\DB as db_n;
-
-class TestBookModel extends Model
-{
-    use \Spirit\Structure\Model\SoftRemoveTrait;
-    protected $table = 'test_relation_model__books';
-    protected $timestamps = true;
-
-    public function category()
-    {
-        return $this->belongTo(TestCategoryModel::class,'category_id','id');
-    }
-
-    public function tags()
-    {
-        return $this->belongToMany(TestTagModel::class,'test_relation_model__book_tag','book_id','tag_id');
-    }
-}
-
-class TestTagModel extends Model
-{
-    protected $table = 'test_relation_model__tags';
-    protected $timestamps = false;
-
-    public function books()
-    {
-        return $this->belongToMany(TestBookModel::class,'test_relation_model__book_tag','tag_id','book_id');
-    }
-}
-
-class TestCategoryModel extends Model
-{
-    protected $table = 'test_relation_model__categories';
-    protected $timestamps = false;
-
-    public function books()
-    {
-        return $this->hasMany(TestBookModel::class,'category_id','id');
-    }
-}
 
 function __getTableNameBooks()
 {
@@ -66,7 +29,7 @@ function __getTableNameBookTag()
 /**
  * @covers DB
  */
-final class ModelRelationTest extends TestCase
+class RelationTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -166,10 +129,10 @@ final class ModelRelationTest extends TestCase
 
     public function testCreate()
     {
-        $category = new TestCategoryModel(['name' => 'Test Category']);
+        $category = new CategoryModel(['name' => 'Test Category']);
         $category->save();
 
-        $book = new TestBookModel(['title' => 'Spirit','author' => 'Nuriev Marat']);
+        $book = new BookModel(['title' => 'Spirit','author' => 'Nuriev Marat']);
         $category->books()->save($book);
 
         $this->assertEquals($category->id, $book->category_id);
@@ -199,13 +162,13 @@ final class ModelRelationTest extends TestCase
     public function testBelongToMany($data)
     {
         /**
-         * @var TestBookModel $book
-         * @var TestCategoryModel $category
+         * @var BookModel $book
+         * @var CategoryModel $category
          */
         list($category, $book) = $data;
 
-        $tag1 = new TestTagModel(['name' => 'Tag 1']);
-        $tag2 = new TestTagModel(['name' => 'Tag 2']);
+        $tag1 = new TagModel(['name' => 'Tag 1']);
+        $tag2 = new TagModel(['name' => 'Tag 2']);
         $tag1->save();
         $tag2->save();
 

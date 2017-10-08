@@ -1,10 +1,11 @@
 <?php
+
+namespace Tests\Route;
+
 use PHPUnit\Framework\TestCase;
-
 use Spirit\Route;
-use Spirit\Request;
 
-final class RouteAliasTest extends TestCase
+class AliasTest extends TestCase
 {
 
     /**

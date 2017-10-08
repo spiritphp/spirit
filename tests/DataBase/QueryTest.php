@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\DataBase;
+
 use PHPUnit\Framework\TestCase;
 use Spirit\DB;
 use Spirit\DB as db_n;
@@ -6,7 +9,7 @@ use Spirit\DB as db_n;
 /**
  * @covers DB
  */
-final class DataBaseQueryTest extends TestCase
+class QueryTest extends TestCase
 {
 
     protected static $__tableName = 'spirit_test__users';
@@ -81,14 +84,14 @@ final class DataBaseQueryTest extends TestCase
 
     public function testConnection()
     {
-        $this->assertTrue(DB::connect()->getConnection() instanceof PDO);
+        $this->assertTrue(DB::connect()->getConnection() instanceof \PDO);
     }
 
     public function testQuery()
     {
         $users = DB::query("SELECT * FROM " . static::$__tableName . " WHERE id = 1 LIMIT 1");
 
-        $this->assertTrue($users instanceof PDOStatement);
+        $this->assertTrue($users instanceof \PDOStatement);
     }
 
     public function testSelect()

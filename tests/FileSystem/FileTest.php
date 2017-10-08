@@ -1,12 +1,14 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\FileSystem;
+
+use PHPUnit\Framework\TestCase;
 use \Spirit\FileSystem\File;
 
 /**
  * @covers DB
  */
-final class FileSystemFileTest extends TestCase
+class FileTest extends TestCase
 {
 
     public function testFile()

@@ -1,10 +1,13 @@
 <?php
+
+namespace Tests\View;
+
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers DB
  */
-final class ViewTemplateTest extends TestCase
+class TemplateTest extends TestCase
 {
 
     public function testDefault()

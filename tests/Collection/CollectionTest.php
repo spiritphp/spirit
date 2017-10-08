@@ -1,6 +1,8 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Collection;
+
+use PHPUnit\Framework\TestCase;
 use \Spirit\Collection;
 
 /**

@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\DataBase;
+
 use PHPUnit\Framework\TestCase;
 use Spirit\DB;
 use Spirit\DB\Schema;
@@ -7,7 +10,7 @@ use Spirit\DB\Schema\Table;
 /**
  * @covers DB
  */
-final class DataBaseInsertOrUpdateTest extends TestCase
+final class InsertOrUpdateTest extends TestCase
 {
 
     protected function setUp()

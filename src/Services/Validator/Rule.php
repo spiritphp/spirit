@@ -3,6 +3,7 @@
 namespace Spirit\Services\Validator;
 
 use Spirit\DB;
+use Spirit\Engine;
 use Spirit\Func\Str;
 use Spirit\FileSystem\File;
 use Spirit\Structure\Model;
@@ -161,7 +162,7 @@ class Rule
 
         $key = 'validator.' . $rule . ($isErrorType ? '.' . $isErrorType : '');
 
-        return lang($key, $errorVar);
+        return Engine::i()->isTesting ? $key : lang($key, $errorVar);
     }
 
     protected function setBreak($v = true)

@@ -1,33 +1,11 @@
 <?php
+
+namespace Tests\Model;
+
 use PHPUnit\Framework\TestCase;
 use Spirit\Structure\Model;
 use Spirit\DB;
 use Spirit\DB as db_n;
-
-class TestUserModel extends Model
-{
-    use \Spirit\Structure\Model\SoftRemoveTrait;
-    protected $table = 'test_base_model__users';
-    protected $timestamps = true;
-
-}
-
-
-class TestUserSecondModel extends Model
-{
-    use \Spirit\Structure\Model\SoftRemoveTrait;
-    protected $table = 'test_base_model__users';
-    protected $timestamps = true;
-
-    protected $hidden = ['email','updated_at','created_at','removed_at'];
-    protected $visible = ['test_param'];
-
-    public function getTestParamData()
-    {
-        return 'is_test_param';
-    }
-
-}
 
 function __getTableName()
 {
@@ -37,7 +15,7 @@ function __getTableName()
 /**
  * @covers DB
  */
-final class ModelBaseTest extends TestCase
+class BaseTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -72,20 +50,20 @@ final class ModelBaseTest extends TestCase
 
     public function testCreate()
     {
-        $user = new TestUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
+        $user = new UserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
 
         $this->assertTrue($user instanceof Model);
-        $this->assertTrue($user instanceof TestUserModel);
+        $this->assertTrue($user instanceof UserModel);
 
         return $user;
     }
 
     /**
-     * @param TestUserModel $user
-     * @return TestUserModel
+     * @param UserModel $user
+     * @return UserModel
      * @depends testCreate
      */
-    public function testSave(TestUserModel $user)
+    public function testSave(UserModel $user)
     {
         $user->save();
 
@@ -101,11 +79,11 @@ final class ModelBaseTest extends TestCase
     }
 
     /**
-     * @param TestUserModel $user
-     * @return TestUserModel
+     * @param UserModel $user
+     * @return UserModel
      * @depends testSave
      */
-    public function testSoftRemove(TestUserModel $user)
+    public function testSoftRemove(UserModel $user)
     {
         $user->remove();
 
@@ -127,11 +105,11 @@ final class ModelBaseTest extends TestCase
     }
 
     /**
-     * @param TestUserModel $user
-     * @return TestUserModel
+     * @param UserModel $user
+     * @return UserModel
      * @depends testSoftRemove
      */
-    public function testRestore(TestUserModel $user)
+    public function testRestore(UserModel $user)
     {
         $user->restore();
 
@@ -149,18 +127,18 @@ final class ModelBaseTest extends TestCase
     }
 
     /**
-     * @param TestUserModel $user
-     * @return TestUserModel
+     * @param UserModel $user
+     * @return UserModel
      * @depends testRestore
      */
-    public function testEdit(TestUserModel $user)
+    public function testEdit(UserModel $user)
     {
         $this->assertEquals('Marat Nuriev', $user->name);
 
         $user->name = 'Nuriev Marat';
         $user->save();
 
-        $freshUser = TestUserModel::find($user->id);
+        $freshUser = UserModel::find($user->id);
 
         $this->assertEquals('Nuriev Marat', $freshUser->name);
 
@@ -173,10 +151,10 @@ final class ModelBaseTest extends TestCase
     }
 
     /**
-     * @param TestUserModel $user
+     * @param UserModel $user
      * @depends testEdit
      */
-    public function testRemove(TestUserModel $user)
+    public function testRemove(UserModel $user)
     {
         $user->forceRemove();
 
@@ -190,11 +168,11 @@ final class ModelBaseTest extends TestCase
      */
     public function testHelper()
     {
-        $user = new TestUserSecondModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
+        $user = new UserSecondModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
         $user->save();
 
         $this->assertTrue($user instanceof Model);
-        $this->assertTrue($user instanceof TestUserSecondModel);
+        $this->assertTrue($user instanceof UserSecondModel);
 
         $this->assertNull($user->email);
         $this->assertEquals('is_test_param',$user->test_param);

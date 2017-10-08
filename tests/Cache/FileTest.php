@@ -1,12 +1,14 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Cache;
+
+use PHPUnit\Framework\TestCase;
 use Spirit\Cache;
 
 /**
  * @covers DB
  */
-final class CacheFileTest extends TestCase
+class FileTest extends TestCase
 {
     /**
      * @var Cache\File

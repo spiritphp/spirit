@@ -1,10 +1,11 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace Tests\Request;
 
+use PHPUnit\Framework\TestCase;
 use Spirit\Request;
 
-final class RequestTest extends TestCase
+class RequestTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
