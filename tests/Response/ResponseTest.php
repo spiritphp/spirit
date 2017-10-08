@@ -1,6 +1,8 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Response;
+
+use PHPUnit\Framework\TestCase;
 use Spirit\Response;
 
 class TestResponseDataArr implements \Spirit\Structure\Arrayable {
@@ -33,7 +35,7 @@ class TestResponseDataJson implements \Spirit\Structure\Jsonable {
     }
 }
 
-final class ResponseTest extends TestCase
+class ResponseTest extends TestCase
 {
     public function testMake()
     {

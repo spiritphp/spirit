@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\DataBase;
+
 use PHPUnit\Framework\TestCase;
 use Spirit\DB;
 use Spirit\DB as db_n;

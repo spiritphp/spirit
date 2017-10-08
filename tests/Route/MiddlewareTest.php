@@ -1,19 +1,12 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Route;
+
+use PHPUnit\Framework\TestCase;
 use Spirit\Route;
 use Spirit\Request;
 
-class TestRouteMiddlewareCheck extends \Spirit\Structure\Middleware {
-
-    public function handle($var = null)
-    {
-        return $var === 'number_one';
-    }
-
-}
-
-final class RouteMiddlewareTest extends TestCase
+class MiddlewareTest extends TestCase
 {
 
     /**
@@ -46,7 +39,7 @@ final class RouteMiddlewareTest extends TestCase
             'middleware' => 'is:number_one'
         ]);
 
-        static::$routing->addMiddleware('is',TestRouteMiddlewareCheck::class);
+        static::$routing->addMiddleware('is',MiddlewareCheck::class);
 
         static::$routing->addMiddleware('own',function (){
             return false;

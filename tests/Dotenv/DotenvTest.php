@@ -1,6 +1,8 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
+namespace Tests\Dotenv;
+
+use PHPUnit\Framework\TestCase;
 use Spirit\Config\Dotenv;
 
 /**

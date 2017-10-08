@@ -1,23 +1,12 @@
 <?php
-use PHPUnit\Framework\TestCase;
+namespace Tests\Route;
 
-use Spirit\Structure\Model;
+use PHPUnit\Framework\TestCase;
 use Spirit\Route;
 use Spirit\DB;
 use Spirit\DB as db_n;
 
-class TestRouteUserModel extends Model
-{
-    use \Spirit\Structure\Model\SoftRemoveTrait;
-    protected $table = 'test_route_model__users';
-    protected $timestamps = true;
-
-}
-
-/**
- * @covers DB
- */
-final class RouteBindTest extends TestCase
+class BindTest extends TestCase
 {
 
     /**
@@ -50,7 +39,7 @@ final class RouteBindTest extends TestCase
             'uses' => 'AppController@testBook'
         ]);
 
-        static::$routing->bindModel('user', TestRouteUserModel::class);
+        static::$routing->bindModel('user', UserModel::class);
         static::$routing->bind('book', function($v) {
             return $v ? $v * 2 : null;
         });
@@ -65,7 +54,7 @@ final class RouteBindTest extends TestCase
 
     public function testModel()
     {
-        $user = new TestRouteUserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
+        $user = new UserModel(['name' => 'Marat Nuriev', 'email' => 'nurieff@gmail.com']);
         $user->save();
 
         $result = static::$routing->parse('test/user/25');
@@ -75,7 +64,7 @@ final class RouteBindTest extends TestCase
         $this->assertNotNull($result);
 
         $this->assertArrayHasKey('user', $result->vars);
-        $this->assertTrue($result->vars['user'] instanceof TestRouteUserModel);
+        $this->assertTrue($result->vars['user'] instanceof UserModel);
     }
 
     public function testCallback()
