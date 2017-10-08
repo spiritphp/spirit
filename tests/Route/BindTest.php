@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Route;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Route;
 use Spirit\DB;
 use Spirit\DB as db_n;

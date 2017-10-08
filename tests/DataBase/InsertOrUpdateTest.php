@@ -2,7 +2,7 @@
 
 namespace Tests\DataBase;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\DB;
 use Spirit\DB\Schema;
 use Spirit\DB\Schema\Table;

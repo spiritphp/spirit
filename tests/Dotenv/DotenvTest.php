@@ -2,7 +2,7 @@
 
 namespace Tests\Dotenv;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Config\Dotenv;
 
 /**

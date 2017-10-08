@@ -2,7 +2,7 @@
 
 namespace Tests\Model;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Structure\Model;
 use Spirit\DB;
 use Spirit\DB as db_n;

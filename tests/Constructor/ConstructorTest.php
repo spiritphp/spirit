@@ -2,7 +2,7 @@
 
 namespace Tests\Constructor;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Constructor;
 
 function spaceFree($string)

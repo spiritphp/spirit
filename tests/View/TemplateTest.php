@@ -2,7 +2,7 @@
 
 namespace Tests\View;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 /**
  * @covers DB

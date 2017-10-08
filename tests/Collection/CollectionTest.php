@@ -2,7 +2,7 @@
 
 namespace Tests\Collection;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use \Spirit\Collection;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Request;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Request;
 
 class RequestTest extends TestCase

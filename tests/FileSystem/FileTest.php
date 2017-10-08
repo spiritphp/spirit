@@ -2,7 +2,7 @@
 
 namespace Tests\FileSystem;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use \Spirit\FileSystem\File;
 
 /**

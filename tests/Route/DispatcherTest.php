@@ -2,7 +2,7 @@
 
 namespace Tests\Route;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Response;
 use Spirit\Route;
 use Spirit\View;

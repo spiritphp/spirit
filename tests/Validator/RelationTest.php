@@ -2,7 +2,7 @@
 
 namespace Tests\Validator;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Services\Validator;
 use Spirit\DB;
 use Spirit\DB as db_n;

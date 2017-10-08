@@ -2,7 +2,7 @@
 
 namespace Tests\Cache;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Cache;
 
 /**

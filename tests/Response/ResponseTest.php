@@ -2,7 +2,7 @@
 
 namespace Tests\Response;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Response;
 
 class TestResponseDataArr implements \Spirit\Structure\Arrayable {

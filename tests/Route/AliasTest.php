@@ -2,7 +2,7 @@
 
 namespace Tests\Route;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Spirit\Route;
 
 class AliasTest extends TestCase
