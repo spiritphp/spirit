@@ -53,6 +53,11 @@ class RequestProvider
     protected $pathArr = [];
     protected $fullPath = '';
 
+    /**
+     * @var ErrorMessages
+     */
+    protected $errors;
+
     public function __construct($post = null, $query = null, $server = null, $files = null, $cookie = null)
     {
         $this->post = Variables::make($post ? $post : $_POST);
@@ -278,13 +283,15 @@ class RequestProvider
      */
     public function errors()
     {
+        if ($this->errors) return $this->errors;
+
         $errors = Session::get('_errors');
 
         if (!$errors || !is_array($errors)) {
             $errors = [];
         }
 
-        return new ErrorMessages($errors);
+        return $this->errors = new ErrorMessages($errors);
     }
 
     public function validate($rules, $titles = null, $customErrors = null)

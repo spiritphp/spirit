@@ -187,3 +187,17 @@ if (!function_exists('lang')) {
         return \Spirit\Lang::get($key, $data);
     }
 }
+
+if (!function_exists('errors')) {
+    function errors()
+    {
+        return \Spirit\Request::errors();
+    }
+}
+
+if (!function_exists('session')) {
+    function session($k, $default= null)
+    {
+        return \Spirit\Request\Session::get($k, $default);
+    }
+}
