@@ -10,10 +10,11 @@ class ErrorController extends Controller
 
     protected $defaultConfig = [
         'views' => [
-            '404' => 'spirit::error/404',
             '403' => 'spirit::error/403',
-            '503' => 'spirit::error/503',
-            '500' => 'spirit::error/500',
+            '404' => 'spirit::error/404',
+            '500' => 'spirit::error/5xx',
+            '502' => 'spirit::error/5xx',
+            '503' => 'spirit::error/5xx',
         ]
     ];
 
@@ -43,7 +44,7 @@ class ErrorController extends Controller
 
         $method = 'error' . $number;
 
-        if (method_exists($this,$method)) {
+        if (method_exists($this, $method)) {
             http_response_code($number);
             return $this->{$method}($message);
         }
@@ -64,7 +65,8 @@ class ErrorController extends Controller
 
         $tpl = $cfg['views']['404'];
 
-        return $this->view($tpl, $data)->headers($this->headers);
+        return $this->view($tpl, $data)
+            ->headers($this->headers);
     }
 
     public function error503($message = null)
@@ -78,7 +80,8 @@ class ErrorController extends Controller
 
         $tpl = $cfg['views']['503'];
 
-        return $this->view($tpl, $data)->headers($this->headers);
+        return $this->view($tpl, $data)
+            ->headers($this->headers);
     }
 
     public function error500($message = null)
@@ -92,7 +95,8 @@ class ErrorController extends Controller
 
         $tpl = $cfg['views']['500'];
 
-        return $this->view($tpl, $data)->headers($this->headers);
+        return $this->view($tpl, $data)
+            ->headers($this->headers);
     }
 
     public function error403($message = null)
@@ -106,16 +110,19 @@ class ErrorController extends Controller
 
         $tpl = $cfg['views']['403'];
 
-        return $this->view($tpl, $data)->headers($this->headers);
+        return $this->view($tpl, $data)
+            ->headers($this->headers);
     }
 
     public function error405($message = '')
     {
-        return Response::make($message ? $message : 'Method Not Allowed')->headers($this->headers);
+        return Response::make($message ? $message : 'Method Not Allowed')
+            ->headers($this->headers);
     }
 
     public function error429($message = '')
     {
-        return Response::make($message ? $message : 'Too Many Attempts')->headers($this->headers);
+        return Response::make($message ? $message : 'Too Many Attempts')
+            ->headers($this->headers);
     }
 }

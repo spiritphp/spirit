@@ -14,6 +14,11 @@ class LogView extends LogAbstract
 
     public function render()
     {
+        $code = $this->info->status_code;
+
+        if (!$code || $code < 100) {
+            $code = 500;
+        }
 
         if ((!Engine::i()->isConsole && !Engine::i()->isDebug) || static::cfg()->pause) {
 
@@ -24,12 +29,12 @@ class LogView extends LogAbstract
                 $classError = new ErrorController();
             }
 
-            echo $classError->init($this->info->status_code, $this->info->message, $this->info->headers);
+            echo $classError->init($code, $this->info->message, $this->info->headers);
             return;
 
         } else if (!Engine::i()->isConsole) {
 
-            http_response_code($this->info->status_code && $this->info->status_code >= 100 ? $this->info->status_code : 500);
+            http_response_code($code);
 
             if ($this->info->headers && count($this->info->headers) > 0) {
                 foreach($this->info->headers as $k => $v) {
