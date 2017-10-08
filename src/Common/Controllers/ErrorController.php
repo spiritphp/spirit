@@ -10,10 +10,10 @@ class ErrorController extends Controller
 
     protected $defaultConfig = [
         'views' => [
-            '405' => '{__SPIRIT__}/error/405',
-            '404' => '{__SPIRIT__}/error/404',
-            '403' => '{__SPIRIT__}/error/403',
-            '503' => '{__SPIRIT__}/error/503',
+            '404' => 'spirit::error/404',
+            '403' => 'spirit::error/403',
+            '503' => 'spirit::error/503',
+            '500' => 'spirit::error/500',
         ]
     ];
 
@@ -77,6 +77,20 @@ class ErrorController extends Controller
         $data['support'] = $this->url('support');
 
         $tpl = $cfg['views']['503'];
+
+        return $this->view($tpl, $data)->headers($this->headers);
+    }
+
+    public function error500($message = null)
+    {
+        $cfg = $this->cfg();
+
+        $data = [];
+        $data['message'] = $message;
+        $data['back'] = $this->url();
+        $data['support'] = $this->url('support');
+
+        $tpl = $cfg['views']['500'];
 
         return $this->view($tpl, $data)->headers($this->headers);
     }

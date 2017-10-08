@@ -18,7 +18,7 @@ class Debug extends Component
     public static function v($view = null, $data = [])
     {
         if (is_null($view)) {
-            $view = '{__SPIRIT__}/components/debug.php';
+            $view = Engine::dir()->spirit_views . 'components/debug.php';
         }
 
         if (count(func\Trace::getTraceAfter()) > 0) {

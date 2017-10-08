@@ -2,6 +2,7 @@
 
 namespace Spirit\Constructor\Components;
 
+use Spirit\Engine;
 use Spirit\Response\FE;
 use Spirit\Structure\Component;
 
@@ -97,7 +98,7 @@ class HtmlHead extends Component
     public function draw($view = null, $data = [])
     {
         if (is_null($view)) {
-            $view = '{__SPIRIT__}/components/htmlhead.php';
+            $view = Engine::dir()->spirit_views . 'components/htmlhead.php';
         }
 
         if (!$title = FE::title()) {
