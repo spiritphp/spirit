@@ -52,20 +52,6 @@ class Rule
         return new static($validator);
     }
 
-    public function customError($key, $error, $rule = false)
-    {
-        if ($rule) {
-            if (!isset($this->validatorMessageError['customs'][$key])) {
-                $this->validatorMessageError['customs'][$key] = [];
-            }
-
-            $this->validatorMessageError['customs'][$key][$rule] = $error;
-        } else {
-            $this->validatorMessageError['customs'][$key] = $error;
-        }
-
-    }
-
     public function checkRule($rule, $value, $attr, $title)
     {
         $this->isBreak = false;
@@ -135,34 +121,26 @@ class Rule
     {
         $isErrorType = $this->getErrorType();
 
+        $key = 'validator.' . $rule . ($isErrorType ? '.' . $isErrorType : '');
+        $custom_key = 'validator.custom.' . $attr . '.' . $rule . ($isErrorType ? '.' . $isErrorType : '');
+
+        if (Engine::i()->isTesting) {
+            return $key;
+        }
+
+        if (!$title) {
+            $title = $v = lang('validator.attributes.' . $attr);
+        }
+
         $errorVar = array_merge([
             ':attr' => ($title ? $title : $attr)
         ], $this->getErrorVars());
-//
-//        $e = false;
-//        if (isset($this->validatorMessageError['customs'][$attr][$rule])) {
-//            $e = $this->validatorMessageError['customs'][$attr][$rule];
-//
-//        } elseif (isset($this->validatorMessageError['customs'][$attr])) {
-//            $e = $this->validatorMessageError['customs'][$attr];
-//
-//        } elseif (isset($this->validatorMessageError['customs'][$rule])) {
-//            $e = $this->validatorMessageError['customs'][$rule];
-//        }
-//
-//        if ($isErrorType && !isset($e[$isErrorType])) {
-//            $e = false;
-//        } elseif (!$isErrorType && !is_string($e)) {
-//            $e = false;
-//        }
 
-//        if (!$e) {
-//            //$e = $this->validatorMessageError[$rule];
-//        }
+        if ($v = lang($custom_key, $errorVar)) {
+            return $v;
+        }
 
-        $key = 'validator.' . $rule . ($isErrorType ? '.' . $isErrorType : '');
-
-        return Engine::i()->isTesting ? $key : lang($key, $errorVar);
+        return lang($key, $errorVar);
     }
 
     protected function setBreak($v = true)
