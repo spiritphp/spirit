@@ -24,7 +24,7 @@ class FileHandler extends \SessionHandler implements \SessionHandlerInterface
 
     function read($id)
     {
-        return is_file($this->savePath . $id) ? file_get_contents($this->savePath . $id) : null;
+        return is_file($this->savePath . $id) ? file_get_contents($this->savePath . $id) : '';
     }
 
     function write($id, $data)
