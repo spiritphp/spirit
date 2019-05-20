@@ -54,10 +54,27 @@ class Routing
         $this->match('get', $path, $options);
     }
 
+    public function delete($path, $options)
+    {
+        $this->match('delete', $path, $options);
+    }
+
+    public function put($path, $options)
+    {
+        $this->match('put', $path, $options);
+    }
+
     public function add($path, $options)
+    {
+        $this->add($path, $options);
+    }
+
+    public function any($path, $options)
     {
         $this->match([
             'post',
+            'delete',
+            'put',
             'get'
         ], $path, $options);
     }
